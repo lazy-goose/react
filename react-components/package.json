@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "prepare": "cd .. && husky install react-components/.husky",
     "lint": "eslint src",
-    "format:fix": "prettier --write src"
+    "format:fix": "prettier --write src",
+    "deploy": "sh deploy.sh"
   },
   "dependencies": {
     "react": "^18.2.0",
