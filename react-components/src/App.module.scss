@@ -1,0 +1,21 @@
+.App {
+  --main: #800080;
+  --link: #0000ff;
+  --link-active: #ff0000;
+  --text: #000000;
+  --text-on-main: #ffffff;
+  --disabled: #808080;
+}
+
+.App {
+  min-width: 40rem;
+  font-size: 2rem;
+  color: var(--text);
+  font-family: 'Alegreya Sans', sans-serif;
+}
+
+.Wrapper {
+  max-width: 75rem;
+  padding-inline: 1rem;
+  margin-inline: auto;
+}
