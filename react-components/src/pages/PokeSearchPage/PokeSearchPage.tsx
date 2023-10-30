@@ -109,6 +109,9 @@ export default class PokeSearchPage extends Component<
 
     return (
       <main className={s.PokeSearchPage}>
+        <a href="https://github.com/lazy-goose/react-components/pull/1">
+          Link to Pull Request
+        </a>
         <section className={s.TopSlot}>
           <TextInput
             placeholder="Search for pokemons"
