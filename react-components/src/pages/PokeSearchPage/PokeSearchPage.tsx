@@ -128,7 +128,7 @@ export default class PokeSearchPage extends Component<
         </section>
         <section className={jcn(s.BottomSlot)}>
           {this.state.isFetching ? (
-            <Loader delay={200} />
+            <Loader />
           ) : (
             <div className={s.PokeList}>
               {this.state.pokemonRenderArray.map((pokemon) => (
