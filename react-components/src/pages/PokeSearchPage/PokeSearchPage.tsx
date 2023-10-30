@@ -1,4 +1,4 @@
-import { ChangeEvent, Component } from 'react';
+import { ChangeEvent, Component, FormEvent } from 'react';
 import s from './PokeSearchPage.module.scss';
 import TextInput from '../../components/@UIKit/TextInput/TextInput';
 import Button from '../../components/@UIKit/Button/Button';
@@ -74,8 +74,9 @@ export default class PokeSearchPage extends Component<
     }
   }
 
-  handleSearchClick = async () => {
+  handleSearch = async (e: FormEvent<HTMLFormElement>) => {
     try {
+      e.preventDefault();
       this.setState({ isFetching: true });
       const searchedPokemons = await searchPokemons(
         this.state.search,
@@ -113,18 +114,20 @@ export default class PokeSearchPage extends Component<
           Link to Pull Request
         </a>
         <section className={s.TopSlot}>
-          <TextInput
-            placeholder="Search for pokemons"
-            value={this.state.search}
-            onChange={this.handleSearchChange}
-          />
-          <Button onClick={this.handleSearchClick}>Search</Button>
-          <LinkButton
-            onClick={this.handleErrorButtonClick}
-            className={s.ErrorLink}
-          >
-            No errors occurred? Click here to throw one!
-          </LinkButton>
+          <form className={s.SearchContainer} onSubmit={this.handleSearch}>
+            <TextInput
+              placeholder="Search for pokemons"
+              value={this.state.search}
+              onChange={this.handleSearchChange}
+            />
+            <Button type="submit">Search</Button>
+            <LinkButton
+              onClick={this.handleErrorButtonClick}
+              className={s.ErrorLink}
+            >
+              No errors occurred? Click here to throw one!
+            </LinkButton>
+          </form>
         </section>
         <section className={jcn(s.BottomSlot)}>
           {this.state.isFetching ? (

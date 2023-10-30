@@ -1,8 +1,11 @@
 .TopSlot {
   margin-top: 17.5rem;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.5rem 1rem;
+
+  .SearchContainer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem 1rem;
+  }
 
   .ErrorLink {
     font-size: 1.5rem;
