@@ -7,11 +7,7 @@ import PokeCard from '../../components/PokeCard/PokeCard';
 import Loader from '../../components/@UIKit/Loader/Loader';
 import jcn from '../../utils/joinClassNames';
 import { IPokemon } from 'pokeapi-typescript';
-import {
-  fetchPokemonNames,
-  fetchPokemonDescriptions,
-  searchPokemons,
-} from '../../API';
+import { fetchPokemonNames, searchPokemons } from '../../API';
 
 type PokeSearchPageProps = Record<string, never>;
 
@@ -56,15 +52,15 @@ export default class PokeSearchPage extends Component<
   async componentDidMount() {
     try {
       const pokemonNames = await fetchPokemonNames();
-      const pokemonRenderArray = this.state.search
-        ? await searchPokemons(this.state.search, pokemonNames)
-        : await fetchPokemonDescriptions(
-            pokemonNames.slice(0, this.state.limitRender)
-          );
+      const searchedPokemons = await searchPokemons(
+        this.state.search,
+        pokemonNames,
+        this.state.limitRender
+      );
       this.setState({
         isFetching: false,
         pokemonNames,
-        pokemonRenderArray,
+        pokemonRenderArray: searchedPokemons,
       });
     } catch (error) {
       this.setState({
@@ -80,7 +76,8 @@ export default class PokeSearchPage extends Component<
       this.setState({ isFetching: true });
       const searchedPokemons = await searchPokemons(
         this.state.search,
-        this.state.pokemonNames.slice(0, this.state.limitRender)
+        this.state.pokemonNames,
+        this.state.limitRender
       );
       this.setState({
         isFetching: false,
