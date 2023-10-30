@@ -3,8 +3,8 @@ import s from './PokeSearchPage.module.scss';
 import TextInput from '../../components/@UIKit/TextInput/TextInput';
 import Button from '../../components/@UIKit/Button/Button';
 import LinkButton from '../../components/@UIKit/LinkButton/LinkButton';
-import PokeCard from '../../components/PokeCard/PokeCard';
 import Loader from '../../components/@UIKit/Loader/Loader';
+import PokeList from '../../components/PokeList/PokeList';
 import jcn from '../../utils/joinClassNames';
 import { IPokemon } from 'pokeapi-typescript';
 import { fetchPokemonNames, searchPokemons } from '../../API';
@@ -130,16 +130,7 @@ export default class PokeSearchPage extends Component<
           {this.state.isFetching ? (
             <Loader />
           ) : (
-            <div className={s.PokeList}>
-              {this.state.pokemonRenderArray.map((pokemon) => (
-                <PokeCard
-                  key={pokemon.name}
-                  name={pokemon.name}
-                  imageUrl={pokemon.sprites.front_default}
-                  types={pokemon.types.map(({ type: { name } }) => name)}
-                />
-              ))}
-            </div>
+            <PokeList pokemons={this.state.pokemonRenderArray} />
           )}
         </section>
       </main>
