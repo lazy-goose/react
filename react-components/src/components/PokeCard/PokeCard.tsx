@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import s from './PokeCard.module.scss';
 import jcn from '../../utils/joinClassNames';
 
@@ -10,24 +9,23 @@ type PokeCardProps = {
   className?: string;
 };
 
-export default class PokeCard extends Component<PokeCardProps> {
-  render() {
-    return (
-      <div className={jcn(s.PokeCard, this.props.className)}>
-        <div className={s.ImageContainer}>
-          {this.props.imageUrl ? (
-            <img
-              className={s.Image}
-              src={this.props.imageUrl}
-              alt={this.props.imageAlt || `${this.props.name} pokemon`}
-            />
-          ) : (
-            <div className={s.ImageFallbackBlock}>?</div>
-          )}
-        </div>
-        <h3 className={s.Name}>{this.props.name}</h3>
-        <p className={s.Types}>Types: {this.props.types.join(', ')}</p>
+export default function PokeCard(props: PokeCardProps) {
+  const { name, types, imageUrl, imageAlt, className } = props;
+  return (
+    <div className={jcn(s.PokeCard, className)}>
+      <div className={s.ImageContainer}>
+        {imageUrl ? (
+          <img
+            className={s.Image}
+            src={imageUrl}
+            alt={imageAlt || `${name} pokemon`}
+          />
+        ) : (
+          <div className={s.ImageFallbackBlock}>?</div>
+        )}
       </div>
-    );
-  }
+      <h3 className={s.Name}>{name}</h3>
+      <p className={s.Types}>Types: {types.join(', ')}</p>
+    </div>
+  );
 }
