@@ -21,3 +21,13 @@
   max-width: 8rem;
   font-size: 1.5rem;
 }
+
+button.Submit {
+  transition-property: transform border-color;
+  transition-duration: 300ms;
+  border: 5px double transparent;
+  &.HighlightSearch {
+    transform: scale(1.1);
+    border-color: var(--warning);
+  }
+}
