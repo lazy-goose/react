@@ -1,25 +1,21 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import s from './App.module.scss';
-import PokeSearchPage from './pages/PokeSearchPage/PokeSearchPage';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
+import MainLayout from './pages/MainLayout/MainLayout';
+import PokeDetails from './components/PokeDetails/PokeDetails';
 
 export default function App() {
   return (
     <div className={s.App}>
-      <div className={s.Wrapper}>
+      <ErrorBoundary fallback={<ErrorPage />}>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <ErrorBoundary fallback={<Navigate to="/error" />}>
-                <PokeSearchPage />
-              </ErrorBoundary>
-            }
-          />
-          <Route path="*" element={<ErrorPage />} />
+          <Route path="/" element={<MainLayout />}>
+            <Route path="pokemon/:pokemon" element={<PokeDetails />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Route>
         </Routes>
-      </div>
+      </ErrorBoundary>
     </div>
   );
 }

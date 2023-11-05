@@ -1,17 +1,17 @@
 import { ChangeEvent, FormEvent, useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import s from './PokeSearchPage.module.scss';
-import TextInput from '../../components/@UIKit/TextInput/TextInput';
-import Button from '../../components/@UIKit/Button/Button';
-import LinkButton from '../../components/@UIKit/LinkButton/LinkButton';
-import Loader from '../../components/@UIKit/Loader/Loader';
-import PokeList from '../../components/PokeList/PokeList';
-import jcn from '../../utils/joinClassNames';
+import s from './PokeSearch.module.scss';
+import TextInput from '../../../components/@UIKit/TextInput/TextInput';
+import Button from '../../../components/@UIKit/Button/Button';
+import LinkButton from '../../../components/@UIKit/LinkButton/LinkButton';
+import Loader from '../../../components/@UIKit/Loader/Loader';
+import PokeList from '../../../components/PokeList/PokeList';
+import jcn from '../../../utils/joinClassNames';
 import { IPokemon } from 'pokeapi-typescript';
-import { fetchPokemonNames, searchPokemons } from '../../API';
-import Pagination from '../../components/Pagination/Pagination';
+import { fetchPokemonNames, searchPokemons } from '../../../API';
+import Pagination from '../../../components/Pagination/Pagination';
 
-export default function PokeSearchPage() {
+export default function PokeSearch() {
   const pokemonNames = useRef<string[]>([]);
 
   const [isFetching, setIsFetching] = useState(true);
@@ -111,7 +111,7 @@ export default function PokeSearchPage() {
   if (error) throw error;
 
   return (
-    <main className={s.PokeSearchPage}>
+    <section className={s.PokeSearchPage}>
       <a href="https://github.com/lazy-goose/react-components/pull/1">
         Link to Pull Request
       </a>
@@ -159,6 +159,6 @@ export default function PokeSearchPage() {
       <section className={jcn(s.BottomSlot)}>
         {isFetching ? <Loader /> : <PokeList pokemons={pokemonRenderArray} />}
       </section>
-    </main>
+    </section>
   );
 }
