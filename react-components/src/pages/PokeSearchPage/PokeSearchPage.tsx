@@ -20,6 +20,7 @@ export default function PokeSearchPage() {
   const [error, setError] = useState<Error>();
   const [search, setSearch] = useState('');
   const [pokemonRenderArray, setPokemonRenderArray] = useState<IPokemon[]>([]);
+  const [highlightSearch, setHighlightSearch] = useState(false);
 
   const DEFAULT_PAGE = 1;
   const DEFAULT_PAGE_SIZE = 150;
@@ -74,9 +75,11 @@ export default function PokeSearchPage() {
         pageSize
       );
       setIsFetching(false);
+      setHighlightSearch(false);
       setPokemonRenderArray(searchedPokemons);
     } catch (error) {
       setIsFetching(false);
+      setHighlightSearch(false);
       setError(error as Error);
     }
   };
@@ -100,13 +103,15 @@ export default function PokeSearchPage() {
       params.set('page', String(p));
       return params;
     });
+    setHighlightSearch(true);
   };
 
   const handlePageSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const value = e.target.value;
+    const value = e.target.value.replace(/\D/, '');
+    setHighlightSearch(pageSizeQuery !== value);
     setSearchParams((params) => {
-      params.set('pageSize', value.replace(/\D/, ''));
+      params.set('pageSize', value);
       params.set('page', String(DEFAULT_PAGE));
       return params;
     });
@@ -126,7 +131,15 @@ export default function PokeSearchPage() {
             value={search}
             onChange={handleSearchChange}
           />
-          <Button type="submit">Search</Button>
+          <Button
+            type="submit"
+            className={jcn(
+              s.Submit,
+              highlightSearch ? s.HighlightSearch : null
+            )}
+          >
+            Search
+          </Button>
           <LinkButton onClick={handleErrorButtonClick} className={s.ErrorLink}>
             No errors occurred? Click here to throw one!
           </LinkButton>
