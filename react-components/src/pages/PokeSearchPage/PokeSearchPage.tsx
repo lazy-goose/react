@@ -55,11 +55,11 @@ export default function PokeSearchPage() {
           page,
           pageSize
         );
-        setIsFetching(false);
         setPokemonRenderArray(searchedPokemons);
       } catch (error) {
-        setIsFetching(false);
         setError(error as Error);
+      } finally {
+        setIsFetching(false);
       }
     })();
   }, []);
@@ -74,13 +74,12 @@ export default function PokeSearchPage() {
         page,
         pageSize
       );
-      setIsFetching(false);
-      setHighlightSearch(false);
       setPokemonRenderArray(searchedPokemons);
     } catch (error) {
+      setError(error as Error);
+    } finally {
       setIsFetching(false);
       setHighlightSearch(false);
-      setError(error as Error);
     }
   };
 
