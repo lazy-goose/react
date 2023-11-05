@@ -16,6 +16,7 @@ export default function PokeCard(props: PokeCardProps) {
   return (
     <div className={jcn(s.PokeCard, className)}>
       <NavLink
+        onMouseDown={(e) => e.stopPropagation()}
         to={{ pathname: `pokemon/${name}`, search: searchParams.toString() }}
         className={s.LinkWrapper}
       >
