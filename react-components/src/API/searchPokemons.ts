@@ -15,11 +15,14 @@ const randomBetween = (min: number, max: number) =>
 export async function searchPokemons(
   value: string,
   names: string[],
-  limit?: number
+  page = 1,
+  limit = 100
 ) {
+  const FROM = Math.floor((page - 1) * limit);
+  const TO = FROM + limit;
   const filteredNames = names
     .filter((v) => v.startsWith(value.toLowerCase().trimEnd()))
-    .slice(0, limit);
+    .slice(FROM, TO);
   if (!filteredNames.length) {
     return new Promise<[]>((resolve) =>
       setTimeout(() => resolve([]), randomBetween(200, 500))
