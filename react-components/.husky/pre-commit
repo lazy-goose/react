@@ -1,6 +1,0 @@
-#!/usr/bin/env sh
-
-_dirname=`dirname -- "$0"`
-
-. "$_dirname/_/husky.sh"
-cd "$_dirname/.." && npm run lint
