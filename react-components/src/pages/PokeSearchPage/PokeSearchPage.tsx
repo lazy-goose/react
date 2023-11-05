@@ -11,14 +11,11 @@ import { IPokemon } from 'pokeapi-typescript';
 import { fetchPokemonNames, searchPokemons } from '../../API';
 import Pagination from '../../components/Pagination/Pagination';
 
-const STORAGE_SEARCH = 'pokeSearchString';
-
 export default function PokeSearchPage() {
   const pokemonNames = useRef<string[]>([]);
 
   const [isFetching, setIsFetching] = useState(true);
   const [error, setError] = useState<Error>();
-  const [search, setSearch] = useState('');
   const [pokemonRenderArray, setPokemonRenderArray] = useState<IPokemon[]>([]);
   const [highlightSearch, setHighlightSearch] = useState(false);
 
@@ -26,22 +23,17 @@ export default function PokeSearchPage() {
   const DEFAULT_PAGE_SIZE = 150;
 
   const [searchParams, setSearchParams] = useSearchParams({
+    search: '',
     page: String(DEFAULT_PAGE),
     pageSize: String(DEFAULT_PAGE_SIZE),
   });
 
+  const searchQuery = searchParams.get('search') || '';
   const pageQuery = searchParams.get('page') || '';
   const pageSizeQuery = searchParams.get('pageSize') || '';
 
   const page = Number(pageQuery || DEFAULT_PAGE);
   const pageSize = Number(pageSizeQuery || DEFAULT_PAGE_SIZE);
-
-  useEffect(() => {
-    const cachedSearchString = localStorage.getItem(STORAGE_SEARCH);
-    if (cachedSearchString) {
-      setSearch(cachedSearchString);
-    }
-  }, []);
 
   useEffect(() => {
     (async () => {
@@ -50,7 +42,7 @@ export default function PokeSearchPage() {
           pokemonNames.current = await fetchPokemonNames();
         }
         const searchedPokemons = await searchPokemons(
-          search,
+          searchQuery,
           pokemonNames.current,
           page,
           pageSize
@@ -69,7 +61,7 @@ export default function PokeSearchPage() {
       e.preventDefault();
       setIsFetching(true);
       const searchedPokemons = await searchPokemons(
-        search,
+        searchQuery,
         pokemonNames.current,
         page,
         pageSize
@@ -85,12 +77,12 @@ export default function PokeSearchPage() {
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    localStorage.setItem(STORAGE_SEARCH, value);
-    setSearch(value);
     setSearchParams((params) => {
+      params.set('search', value);
       params.set('page', String(DEFAULT_PAGE));
       return params;
     });
+    setHighlightSearch(true);
   };
 
   const handleErrorButtonClick = () => {
@@ -127,7 +119,7 @@ export default function PokeSearchPage() {
         <form className={s.SearchContainer} onSubmit={handleSearch}>
           <TextInput
             placeholder="Search for pokemons"
-            value={search}
+            value={searchQuery}
             onChange={handleSearchChange}
           />
           <Button
