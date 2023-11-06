@@ -2,7 +2,8 @@
   max-width: 120rem;
   padding-inline: 1rem;
   margin-inline: auto;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   gap: 2rem;
 
   > * {
@@ -20,14 +21,13 @@
 }
 
 .Aside {
-  min-height: 100svh;
-  max-width: 33rem;
+  min-height: 90svh;
+  min-width: 25rem;
   border: 1px solid var(--neutral);
 
   &Sticky {
     position: sticky;
     top: 1rem;
-    max-height: 100svh;
     padding: 2rem;
     display: flex;
     flex-direction: column;

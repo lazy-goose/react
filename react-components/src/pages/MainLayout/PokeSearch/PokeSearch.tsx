@@ -111,7 +111,7 @@ export default function PokeSearch() {
   if (error) throw error;
 
   return (
-    <section className={s.PokeSearchPage}>
+    <div>
       <a href="https://github.com/lazy-goose/react-components/pull/1">
         Link to Pull Request
       </a>
@@ -139,6 +139,7 @@ export default function PokeSearch() {
           {!isFetching && (
             <>
               <Pagination
+                className={s.Pagination}
                 currentPage={page}
                 pageSize={pageSize}
                 totalCount={pokemonNames.current.length}
@@ -159,6 +160,6 @@ export default function PokeSearch() {
       <section className={jcn(s.BottomSlot)}>
         {isFetching ? <Loader /> : <PokeList pokemons={pokemonRenderArray} />}
       </section>
-    </section>
+    </div>
   );
 }

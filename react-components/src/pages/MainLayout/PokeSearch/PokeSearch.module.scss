@@ -1,3 +1,5 @@
+@use '../MainLayout.module.scss';
+
 .TopSlot {
   margin-top: 4rem;
 
@@ -30,4 +32,9 @@ button.Submit {
     transform: scale(1.1);
     border-color: var(--warning);
   }
+}
+
+.Pagination {
+  max-width: 56rem;
+  width: 90vw;
 }
