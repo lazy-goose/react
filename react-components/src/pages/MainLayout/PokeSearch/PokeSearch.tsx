@@ -112,7 +112,7 @@ export default function PokeSearch() {
 
   return (
     <div>
-      <a href="https://github.com/lazy-goose/react-components/pull/1">
+      <a href="https://github.com/lazy-goose/react-components/pull/2">
         Link to Pull Request
       </a>
       <section className={s.TopSlot}>
