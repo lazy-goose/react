@@ -14,10 +14,10 @@ import Pagination from '../../../components/Pagination/Pagination';
 export default function PokeSearch() {
   const pokemonList = useRef<PokemonList>([]);
 
-  const [isFetching, setIsFetching] = useState(true);
+  const [isSearchFetching, setIsSearchFetching] = useState(true);
+  const [isPageFetching, setIsPageFetching] = useState(true);
   const [error, setError] = useState<Error>();
   const [pokemonRenderArray, setPokemonRenderArray] = useState<IPokemon[]>([]);
-  const [highlightSearch, setHighlightSearch] = useState(false);
 
   const DEFAULT_PAGE = 1;
   const DEFAULT_PAGE_SIZE = 150;
@@ -51,27 +51,34 @@ export default function PokeSearch() {
       } catch (error) {
         setError(error as Error);
       } finally {
-        setIsFetching(false);
+        setIsSearchFetching(false);
+        setIsPageFetching(false);
       }
     })();
-  }, []);
+  }, [page]);
 
-  const handleSearch = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
-      setIsFetching(true);
+      setIsSearchFetching(true);
+      if (page !== 1) {
+        setSearchParams((params) => {
+          params.set('page', String(DEFAULT_PAGE));
+          return params;
+        });
+      }
       const searchedPokemons = await searchPokemons(
         searchQuery,
         pokemonList.current || [],
-        page,
+        1,
         pageSize
       );
       setPokemonRenderArray(searchedPokemons);
     } catch (error) {
       setError(error as Error);
     } finally {
-      setIsFetching(false);
-      setHighlightSearch(false);
+      setIsSearchFetching(false);
+      setIsPageFetching(false);
     }
   };
 
@@ -79,10 +86,8 @@ export default function PokeSearch() {
     const value = e.target.value;
     setSearchParams((params) => {
       params.set('search', value);
-      params.set('page', String(DEFAULT_PAGE));
       return params;
     });
-    setHighlightSearch(true);
   };
 
   const handleErrorButtonClick = () => {
@@ -94,16 +99,14 @@ export default function PokeSearch() {
       params.set('page', String(p));
       return params;
     });
-    setHighlightSearch(true);
+    setIsPageFetching(true);
   };
 
   const handlePageSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const value = e.target.value.replace(/\D/, '');
-    setHighlightSearch(pageSizeQuery !== value);
     setSearchParams((params) => {
       params.set('pageSize', value);
-      params.set('page', String(DEFAULT_PAGE));
       return params;
     });
   };
@@ -116,30 +119,33 @@ export default function PokeSearch() {
         Link to Pull Request
       </a>
       <section className={s.TopSlot}>
-        <form className={s.SearchContainer} onSubmit={handleSearch}>
-          <TextInput
-            placeholder="Search for pokemons"
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-          <Button
-            type="submit"
-            className={jcn(
-              s.Submit,
-              highlightSearch ? s.HighlightSearch : null
-            )}
-          >
-            Search
-          </Button>
-          <LinkButton onClick={handleErrorButtonClick} className={s.ErrorLink}>
-            No errors occurred? Click here to throw one!
-          </LinkButton>
-        </form>
-        <div>
-          {!isFetching && (
-            <>
+        <form
+          className={jcn(
+            s.Form,
+            isSearchFetching || isPageFetching ? s._Disable : null
+          )}
+          onSubmit={handleSubmit}
+        >
+          <fieldset className={s.Search}>
+            <TextInput
+              placeholder="Search for pokemons"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            <Button type="submit" className={s.Submit}>
+              Search
+            </Button>
+            <LinkButton
+              onClick={handleErrorButtonClick}
+              className={s.ErrorLink}
+            >
+              No errors occurred? Click here to throw one!
+            </LinkButton>
+          </fieldset>
+          {!isSearchFetching && (
+            <fieldset className={s.Pagination}>
               <Pagination
-                className={s.Pagination}
+                className={s.Pages}
                 currentPage={page}
                 pageSize={pageSize}
                 totalCount={pokemonList.current.length}
@@ -150,15 +156,19 @@ export default function PokeSearch() {
                 // Bug with type="number"
                 type="text"
                 value={pageSizeQuery}
-                placeholder={String(DEFAULT_PAGE_SIZE)}
+                placeholder={`${DEFAULT_PAGE_SIZE}`}
                 onChange={handlePageSizeChange}
               />
-            </>
+            </fieldset>
           )}
-        </div>
+        </form>
       </section>
-      <section className={jcn(s.BottomSlot)}>
-        {isFetching ? <Loader /> : <PokeList pokemons={pokemonRenderArray} />}
+      <section className={s.BottomSlot}>
+        {isSearchFetching || isPageFetching ? (
+          <Loader />
+        ) : (
+          <PokeList pokemons={pokemonRenderArray} />
+        )}
       </section>
     </div>
   );
