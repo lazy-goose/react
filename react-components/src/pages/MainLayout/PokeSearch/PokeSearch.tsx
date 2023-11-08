@@ -8,11 +8,11 @@ import Loader from '../../../components/@UIKit/Loader/Loader';
 import PokeList from '../../../components/PokeList/PokeList';
 import jcn from '../../../utils/joinClassNames';
 import { IPokemon } from 'pokeapi-typescript';
-import { fetchPokemonNames, searchPokemons } from '../../../API';
+import { PokemonList, fetchPokemonList, searchPokemons } from '../../../API';
 import Pagination from '../../../components/Pagination/Pagination';
 
 export default function PokeSearch() {
-  const pokemonNames = useRef<string[]>([]);
+  const pokemonList = useRef<PokemonList>([]);
 
   const [isFetching, setIsFetching] = useState(true);
   const [error, setError] = useState<Error>();
@@ -38,12 +38,12 @@ export default function PokeSearch() {
   useEffect(() => {
     (async () => {
       try {
-        if (!pokemonNames.current.length) {
-          pokemonNames.current = await fetchPokemonNames();
+        if (!pokemonList.current.length) {
+          pokemonList.current = await fetchPokemonList();
         }
         const searchedPokemons = await searchPokemons(
           searchQuery,
-          pokemonNames.current,
+          pokemonList.current,
           page,
           pageSize
         );
@@ -62,7 +62,7 @@ export default function PokeSearch() {
       setIsFetching(true);
       const searchedPokemons = await searchPokemons(
         searchQuery,
-        pokemonNames.current,
+        pokemonList.current || [],
         page,
         pageSize
       );
@@ -142,7 +142,7 @@ export default function PokeSearch() {
                 className={s.Pagination}
                 currentPage={page}
                 pageSize={pageSize}
-                totalCount={pokemonNames.current.length}
+                totalCount={pokemonList.current.length}
                 onPageChange={handlePageChange}
               />
               <input
