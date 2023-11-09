@@ -13,23 +13,24 @@ export async function searchPokemons(
   const FROM = Math.floor((page - 1) * limit);
   const TO = FROM + limit;
 
-  const filteredNames = list
+  const filtered = list
     .map((i) => i.name)
-    .filter((n) => n.startsWith(value.toLowerCase().trimEnd()))
-    .slice(FROM, TO);
+    .filter((n) => n.startsWith(value.toLowerCase().trimEnd()));
 
-  if (!filteredNames.length) {
-    return new Promise<[]>((resolve) =>
-      setTimeout(() => resolve([]), randomBetween(200, 500))
+  const pageLimited = filtered.slice(FROM, TO);
+
+  if (!pageLimited.length) {
+    return new Promise<[[], 1]>((resolve) =>
+      setTimeout(() => resolve([[], 1]), randomBetween(200, 500))
     );
   }
 
-  const descriptionPromises = filteredNames.map((n) =>
+  const descriptionPromises = pageLimited.map((n) =>
     PokeAPI.Pokemon.resolve(n)
   );
   const descriptions = (await Promise.allSettled(descriptionPromises)).filter(
     (p) => p.status === 'fulfilled'
   ) as PromiseFulfilledResult<IPokemon>[];
 
-  return descriptions.map((d) => d.value);
+  return [descriptions.map((d) => d.value), filtered.length] as const;
 }

@@ -19,6 +19,7 @@ export default function PokeSearch() {
   const [isPageFetching, setIsPageFetching] = useState(true);
   const [error, setError] = useState<Error>();
   const [pokemonRenderArray, setPokemonRenderArray] = useState<IPokemon[]>([]);
+  const [pageCount, setPageCount] = useState(1);
 
   const DEFAULT_PAGE = 1;
   const DEFAULT_PAGE_SIZE = 150;
@@ -42,13 +43,14 @@ export default function PokeSearch() {
         if (!pokemonList.current.length) {
           pokemonList.current = await fetchPokemonList();
         }
-        const searchedPokemons = await searchPokemons(
+        const [searchedPokemons, total] = await searchPokemons(
           searchQuery,
           pokemonList.current,
           page,
           pageSize
         );
         setPokemonRenderArray(searchedPokemons);
+        setPageCount(total);
       } catch (error) {
         setError(error as Error);
       } finally {
@@ -68,13 +70,14 @@ export default function PokeSearch() {
           return params;
         });
       }
-      const searchedPokemons = await searchPokemons(
+      const [searchedPokemons, total] = await searchPokemons(
         searchQuery,
         pokemonList.current || [],
         1,
         pageSize
       );
       setPokemonRenderArray(searchedPokemons);
+      setPageCount(total);
     } catch (error) {
       setError(error as Error);
     } finally {
@@ -157,7 +160,7 @@ export default function PokeSearch() {
                 className={s.Pages}
                 currentPage={page}
                 pageSize={pageSize}
-                totalCount={pokemonList.current.length}
+                totalCount={pageCount}
                 onPageChange={handlePageChange}
               />
             </fieldset>
