@@ -7,10 +7,25 @@
   --disabled: #808080;
   --warning: #ffa500;
   --neutral: #edeaea;
+  --background: #ffffff;
+}
+
+:global {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
+  }
 }
 
 .App {
-  min-width: 40rem;
+  height: 100%;
   font-size: 2rem;
   color: var(--text);
   font-family: 'Alegreya Sans', sans-serif;

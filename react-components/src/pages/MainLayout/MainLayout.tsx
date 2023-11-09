@@ -1,8 +1,4 @@
-import {
-  useOutlet,
-  useSearchParams,
-  NavLink,
-} from 'react-router-dom';
+import { useOutlet, useSearchParams, NavLink } from 'react-router-dom';
 import PokeSearch from './PokeSearch/PokeSearch';
 import s from './MainLayout.module.scss';
 import PokeDetails from '../../components/PokeDetails/PokeDetails';

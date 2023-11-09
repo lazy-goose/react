@@ -8,13 +8,14 @@ type PokeCardProps = {
   imageUrl: string;
   imageAlt?: string;
   className?: string;
+  active?: boolean;
 };
 
 export default function PokeCard(props: PokeCardProps) {
-  const { name, types, imageUrl, imageAlt, className } = props;
+  const { name, types, imageUrl, imageAlt, className, active } = props;
   const [searchParams] = useSearchParams();
   return (
-    <div className={jcn(s.PokeCard, className)}>
+    <div className={jcn(s.PokeCard, active ? s.Active : null, className)}>
       <NavLink
         to={{ pathname: `pokemon/${name}`, search: searchParams.toString() }}
         className={s.LinkWrapper}

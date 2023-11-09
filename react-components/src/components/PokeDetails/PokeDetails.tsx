@@ -32,6 +32,7 @@ export default function PokeDetails() {
 
   return (
     <div className={s.PokeDetails}>
+      <h2 className={s.Heading}>{pokemonName}</h2>
       {isFetching ? (
         <Loader className={s.Loader} />
       ) : (

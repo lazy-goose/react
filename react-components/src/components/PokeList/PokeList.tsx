@@ -4,10 +4,11 @@ import PokeCard from '../PokeCard/PokeCard';
 
 type PokeListProps = {
   pokemons: IPokemon[];
+  selected?: IPokemon;
 };
 
 export default function PokeList(props: PokeListProps) {
-  const { pokemons } = props;
+  const { pokemons, selected } = props;
   return (
     <div className={s.PokeList}>
       {pokemons.length ? (
@@ -18,6 +19,7 @@ export default function PokeList(props: PokeListProps) {
               name={pokemon.name}
               imageUrl={pokemon.sprites.front_default}
               types={pokemon.types.map(({ type: { name } }) => name)}
+              active={pokemon === selected}
             />
           ))}
         </div>

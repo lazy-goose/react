@@ -1,11 +1,20 @@
 .PageList {
   margin: 0;
   padding: 0;
-  padding-bottom: 1.5rem;
+  padding-bottom: 1rem;
   display: flex;
   gap: 0.25rem;
   list-style: none;
   overflow-x: auto;
+  scrollbar-width: thin;
+  li {
+    display: flex;
+    &.Active .PageItemButton {
+      color: var(--text-on-main);
+      background-color: var(--main);
+      text-decoration: underline;
+    }
+  }
 }
 
 .PageItemButton {
@@ -13,6 +22,8 @@
   min-height: 2em;
   min-width: 2em;
   cursor: pointer;
+  background: none;
+  border: 1px solid var(--text);
   &:disabled {
     cursor: default;
   }

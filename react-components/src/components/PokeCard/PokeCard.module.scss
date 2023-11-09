@@ -1,38 +1,36 @@
 .PokeCard {
+  padding: 0.5rem 1rem;
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: baseline;
+  align-items: center;
   gap: 0.25rem;
-  font: inherit;
-  color: inherit;
-}
-
-.LinkWrapper {
-  padding: 0.5rem 1rem;
-  display: block;
+  box-sizing: border-box;
   cursor: pointer;
-  text-decoration: none;
   border: 1px solid transparent;
-
+  &.Active {
+    pointer-events: none;
+  }
+  &.Active,
   &:hover {
-    border: 1px solid var(--link);
+    border-color: var(--link);
   }
 }
 
-.ImageContainer {
+.LinkWrapper {
+  text-decoration: none;
+}
+
+.ImageFallbackBlock,
+.Image {
+  margin-inline: auto;
+  display: block;
   width: 12rem;
   height: 12rem;
   max-width: 100%;
 }
 
-.Image {
-  width: 100%;
-  height: auto;
-}
-
 .ImageFallbackBlock {
-  height: 100%;
   display: grid;
   place-content: center;
   font-size: 3.25em;

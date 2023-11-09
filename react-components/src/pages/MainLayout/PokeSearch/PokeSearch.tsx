@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import s from './PokeSearch.module.scss';
 import TextInput from '../../../components/@UIKit/TextInput/TextInput';
 import Button from '../../../components/@UIKit/Button/Button';
@@ -12,6 +12,7 @@ import { PokemonList, fetchPokemonList, searchPokemons } from '../../../API';
 import Pagination from '../../../components/Pagination/Pagination';
 
 export default function PokeSearch() {
+  const { pokemon: pokemonName = '' } = useParams();
   const pokemonList = useRef<PokemonList>([]);
 
   const [isSearchFetching, setIsSearchFetching] = useState(true);
@@ -104,7 +105,7 @@ export default function PokeSearch() {
 
   const handlePageSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const value = e.target.value.replace(/\D/, '');
+    const value = e.target.value.replace(/\D/, '').replace(/^0/, '');
     setSearchParams((params) => {
       params.set('pageSize', value);
       return params;
@@ -144,13 +145,6 @@ export default function PokeSearch() {
           </fieldset>
           {!isSearchFetching && (
             <fieldset className={s.Pagination}>
-              <Pagination
-                className={s.Pages}
-                currentPage={page}
-                pageSize={pageSize}
-                totalCount={pokemonList.current.length}
-                onPageChange={handlePageChange}
-              />
               <input
                 className={s.PageSizeInput}
                 // Bug with type="number"
@@ -159,15 +153,25 @@ export default function PokeSearch() {
                 placeholder={`${DEFAULT_PAGE_SIZE}`}
                 onChange={handlePageSizeChange}
               />
+              <Pagination
+                className={s.Pages}
+                currentPage={page}
+                pageSize={pageSize}
+                totalCount={pokemonList.current.length}
+                onPageChange={handlePageChange}
+              />
             </fieldset>
           )}
         </form>
       </section>
       <section className={s.BottomSlot}>
         {isSearchFetching || isPageFetching ? (
-          <Loader />
+          <Loader className={s.Loader} />
         ) : (
-          <PokeList pokemons={pokemonRenderArray} />
+          <PokeList
+            pokemons={pokemonRenderArray}
+            selected={pokemonRenderArray.find((p) => p.name === pokemonName)}
+          />
         )}
       </section>
     </div>

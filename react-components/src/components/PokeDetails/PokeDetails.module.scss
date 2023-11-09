@@ -1,29 +1,35 @@
 .PokeDetails {
-  min-height: 70rem;
-  display: grid;
+  width: 25rem;
   font-size: 1.5rem;
-
-  .Loader {
-    align-self: center;
-    justify-self: center;
-  }
-
-  .KeyValue {
-    margin-bottom: 0.5rem;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--neutral);
-  }
-
-  h4 {
-    margin-block: 0.5em;
-  }
-
-  ul, p {
-    margin-block: 0.8em;
-  }
+  max-height: 100svh;
 
   & > ul {
     margin-top: 0;
   }
+
+  ul,
+  p {
+    margin-block: 0.8em;
+  }
+
+  h4 {
+    margin-block: 0.5em;
+    text-transform: capitalize;
+  }
+}
+
+.Loader {
+  margin-top: 20rem;
+}
+
+.KeyValue {
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--neutral);
+}
+
+.Heading {
+  margin-block: 3rem;
+  text-transform: capitalize;
 }

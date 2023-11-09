@@ -1,4 +1,5 @@
 .MainLayout {
+  min-height: 100%;
   max-width: 120rem;
   padding-inline: 1rem;
   margin-inline: auto;
@@ -6,8 +7,8 @@
   grid-template-columns: 1fr auto;
   gap: 2rem;
 
-  > * {
-    flex: 1;
+  @media screen and (max-width: 60rem) {
+    grid-template-columns: auto;
   }
 }
 
@@ -21,17 +22,22 @@
 }
 
 .Aside {
-  min-height: 90svh;
-  min-width: 25rem;
+  max-width: 100%;
+  width: 30rem;
+  height: 100%;
   border: 1px solid var(--neutral);
+  background-color: var(--background);
 
   &Sticky {
+    max-height: 100lvh;
     position: sticky;
-    top: 1rem;
+    top: 0.625rem;
     padding: 2rem;
     display: flex;
     flex-direction: column;
+    padding-bottom: 5rem;
     overflow-y: auto;
+    box-sizing: border-box;
   }
 
   &CloseButton {
@@ -39,5 +45,15 @@
     align-self: end;
     font-size: 2rem;
     cursor: pointer;
+  }
+
+  @media screen and (max-width: 60rem) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    overflow-y: auto;
+    &Sticky {
+      position: static;
+    }
   }
 }
