@@ -49,8 +49,15 @@ export default function PokeSearch() {
           page,
           pageSize
         );
-        setPokemonRenderArray(searchedPokemons);
-        setPageCount(total);
+        if (page <= Math.ceil(total / pageSize)) {
+          setPokemonRenderArray(searchedPokemons);
+          setPageCount(total);
+        } else {
+          setSearchParams((params) => {
+            params.set('page', '1');
+            return params;
+          });
+        }
       } catch (error) {
         setError(error as Error);
       } finally {
