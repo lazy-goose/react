@@ -1,0 +1,49 @@
+.PokeCard {
+  padding: 0.5rem 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 1px solid transparent;
+  &.Active {
+    pointer-events: none;
+  }
+  &.Active,
+  &:hover {
+    border-color: var(--link);
+  }
+}
+
+.LinkWrapper {
+  text-decoration: none;
+}
+
+.ImageFallbackBlock,
+.Image {
+  margin-inline: auto;
+  display: block;
+  width: 12rem;
+  height: 12rem;
+  max-width: 100%;
+}
+
+.ImageFallbackBlock {
+  display: grid;
+  place-content: center;
+  font-size: 3.25em;
+  font-weight: bold;
+}
+
+.Name {
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.Types {
+  margin: 0.55em 0;
+  font-size: 0.9em;
+}
