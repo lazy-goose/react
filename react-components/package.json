@@ -10,7 +10,10 @@
     "prepare": "cd .. && husky install react-components/.husky",
     "lint": "eslint src",
     "format:fix": "prettier --write src",
-    "deploy": "sh deploy.sh"
+    "deploy": "sh deploy.sh",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "pokeapi-typescript": "^2.1.0",
@@ -26,6 +29,7 @@
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "@typescript-eslint/parser": "^6.9.0",
     "@vitejs/plugin-react": "^4.0.3",
+    "@vitest/coverage-v8": "^0.34.6",
     "eslint": "^8.52.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-import-resolver-typescript": "^3.6.1",
