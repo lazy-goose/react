@@ -11,6 +11,8 @@ import { IPokemon } from 'pokeapi-typescript';
 import { PokemonList, fetchPokemonList, searchPokemons } from '../../../API';
 import Pagination from '../../../components/Pagination/Pagination';
 
+const STORAGE_SEARCH = 'pokeSearchString';
+
 export default function PokeSearch() {
   const { pokemon: pokemonName = '' } = useParams();
   const pokemonList = useRef<PokemonList>([]);
@@ -40,11 +42,24 @@ export default function PokeSearch() {
   useEffect(() => {
     (async () => {
       try {
+        let searchString = searchQuery;
+        if (!searchString) {
+          const cachedSearchString = localStorage
+            .getItem(STORAGE_SEARCH)
+            ?.trimEnd();
+          if (cachedSearchString) {
+            setSearchParams((params) => {
+              params.set('search', searchString);
+              return params;
+            });
+            searchString = cachedSearchString;
+          }
+        }
         if (!pokemonList.current.length) {
           pokemonList.current = await fetchPokemonList();
         }
         const [searchedPokemons, total] = await searchPokemons(
-          searchQuery,
+          searchString,
           pokemonList.current,
           page,
           pageSize
@@ -94,11 +109,12 @@ export default function PokeSearch() {
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value.trimEnd();
     setSearchParams((params) => {
       params.set('search', value);
       return params;
     });
+    localStorage.setItem(STORAGE_SEARCH, value);
   };
 
   const handleErrorButtonClick = () => {
