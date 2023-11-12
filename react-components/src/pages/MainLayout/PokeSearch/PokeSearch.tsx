@@ -7,11 +7,10 @@ import LinkButton from '../../../components/@UIKit/LinkButton/LinkButton';
 import Loader from '../../../components/@UIKit/Loader/Loader';
 import PokeList from '../../../components/PokeList/PokeList';
 import jcn from '../../../utils/joinClassNames';
-import { IPokemon } from 'pokeapi-typescript';
 import { PokemonList, fetchPokemonList, searchPokemons } from '../../../API';
 import Pagination from '../../../components/Pagination/Pagination';
-
-const STORAGE_SEARCH = 'pokeSearchString';
+import { usePokemons } from '../../../slices/Pokemons';
+import { useSearchValue } from '../../../slices/SearchValue';
 
 export default function PokeSearch() {
   const { pokemon: pokemonName = '' } = useParams();
@@ -20,19 +19,18 @@ export default function PokeSearch() {
   const [isSearchFetching, setIsSearchFetching] = useState(true);
   const [isPageFetching, setIsPageFetching] = useState(true);
   const [error, setError] = useState<Error>();
-  const [pokemonRenderArray, setPokemonRenderArray] = useState<IPokemon[]>([]);
+  const [pokemonRenderArray, setPokemonRenderArray] = usePokemons();
   const [pageCount, setPageCount] = useState(1);
+  const [searchValue, setSearchValue] = useSearchValue();
 
   const DEFAULT_PAGE = 1;
   const DEFAULT_PAGE_SIZE = 150;
 
   const [searchParams, setSearchParams] = useSearchParams({
-    search: '',
     page: String(DEFAULT_PAGE),
     pageSize: String(DEFAULT_PAGE_SIZE),
   });
 
-  const searchQuery = searchParams.get('search') || '';
   const pageQuery = searchParams.get('page') || '';
   const pageSizeQuery = searchParams.get('pageSize') || '';
 
@@ -42,24 +40,11 @@ export default function PokeSearch() {
   useEffect(() => {
     (async () => {
       try {
-        let searchString = searchQuery;
-        if (!searchString) {
-          const cachedSearchString = localStorage
-            .getItem(STORAGE_SEARCH)
-            ?.trimEnd();
-          if (cachedSearchString) {
-            setSearchParams((params) => {
-              params.set('search', searchString);
-              return params;
-            });
-            searchString = cachedSearchString;
-          }
-        }
         if (!pokemonList.current.length) {
           pokemonList.current = await fetchPokemonList();
         }
         const [searchedPokemons, total] = await searchPokemons(
-          searchString,
+          searchValue,
           pokemonList.current,
           page,
           pageSize
@@ -93,7 +78,7 @@ export default function PokeSearch() {
         });
       }
       const [searchedPokemons, total] = await searchPokemons(
-        searchQuery,
+        searchValue,
         pokemonList.current || [],
         1,
         pageSize
@@ -109,12 +94,7 @@ export default function PokeSearch() {
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trimEnd();
-    setSearchParams((params) => {
-      params.set('search', value);
-      return params;
-    });
-    localStorage.setItem(STORAGE_SEARCH, value);
+    setSearchValue(e.target.value.trimEnd());
   };
 
   const handleErrorButtonClick = () => {
@@ -156,7 +136,7 @@ export default function PokeSearch() {
           <fieldset className={s.Search}>
             <TextInput
               placeholder="Search for pokemons"
-              value={searchQuery}
+              value={searchValue}
               onChange={handleSearchChange}
             />
             <Button type="submit" className={s.Submit}>
