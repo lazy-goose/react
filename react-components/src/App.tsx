@@ -12,8 +12,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route path="pokemon/:pokemon" element={<PokeDetails />} />
-            <Route path="*" element={<ErrorPage />} />
           </Route>
+          <Route path="/*" element={<ErrorPage />} />
         </Routes>
       </ErrorBoundary>
     </div>
