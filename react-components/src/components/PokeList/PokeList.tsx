@@ -12,7 +12,7 @@ export default function PokeList(props: PokeListProps) {
   return (
     <div className={s.PokeList}>
       {pokemons.length ? (
-        <div className={s.PokeGrid}>
+        <div className={s.PokeGrid} data-testid="pokemons-container">
           {pokemons.map((pokemon) => (
             <PokeCard
               key={pokemon.name}
