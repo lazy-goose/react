@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
-_dirname=`dirname -- "$0"`
+. "`dirname -- "$0"`/_init"
 
-. "$_dirname/_/husky.sh"
-cd "$_dirname/.." && npm run lint
+npm run lint
+npm run test
+npm run coverage
