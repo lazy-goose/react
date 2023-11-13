@@ -34,9 +34,9 @@ export default function PokeDetails() {
     <div className={s.PokeDetails} data-testid="pokemon-details">
       <h2 className={s.Heading}>{pokemonName}</h2>
       {isFetching ? (
-        <Loader className={s.Loader} />
+        <Loader className={s.Loader} testId="details-loader" />
       ) : (
-        <ul>
+        <ul data-testid="pokemon-details-description">
           <li>
             <h4>Weight</h4>
             <p>{pokemon?.weight}</p>

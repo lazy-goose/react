@@ -1,14 +1,11 @@
-import { vi, describe, test, expect, beforeEach } from 'vitest';
+import { vi, describe, test, expect, beforeEach, SpyInstance } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import PokeCard from '../components/PokeCard/PokeCard';
 import stubPokemon from './data/pokemon.json';
-import App from '../App';
-import names from './data/names.json';
-import pokemon from './data/pokemon.json';
-import pokemons from './data/pokemons.json';
-import { BrowserRouter } from 'react-router-dom';
+import renderApp, { mockPokeAPI } from './renderApp';
+import * as API from '../API';
 
 const pokemonData = {
   name: stubPokemon.name,
@@ -25,23 +22,13 @@ describe('Tests for the Card component', () => {
       </MemoryRouter>
     );
 
-  const renderApp = () =>
-    render(
-      <MemoryRouter initialEntries={[`/`]}>
-        <App />
-      </MemoryRouter>
-    );
+  let fetchPokemonByName: SpyInstance;
+  let user: UserEvent;
 
   beforeEach(() => {
-    vi.mock('../API', async (importOriginal) => {
-      const mod = await importOriginal<typeof import('../API')>();
-      return {
-        ...mod,
-        fetchPokemonList: () => names,
-        fetchPokemonByName: () => pokemon,
-        searchPokemons: () => [pokemons, pokemons.length],
-      };
-    });
+    user = userEvent.setup();
+    mockPokeAPI();
+    fetchPokemonByName = vi.spyOn(API, 'fetchPokemonByName');
   });
 
   test('Ensure that the card component renders the relevant card data', async () => {
@@ -56,22 +43,18 @@ describe('Tests for the Card component', () => {
   });
 
   test('Validate that clicking on a card opens a detailed card component', async () => {
-    render(<App />, { wrapper: BrowserRouter });
-    const user = userEvent.setup();
+    renderApp();
     const Cards = await screen.findAllByTestId('pokemon-card-link');
-    const FirstCard = Cards[0];
-    await user.click(FirstCard);
+    await user.click(Cards[0]);
     const Aside = await screen.findByTestId('aside');
     expect(Aside).toBeInTheDocument();
   });
 
   test('Check that clicking triggers an additional API call to fetch detailed information', async () => {
     renderApp();
-    const fn = vi.spyOn(global, 'fetch');
-    const BottomSlot = screen.getByTestId('bottom-slot');
-    const FirstCard = BottomSlot.firstElementChild;
-    const user = userEvent.setup();
-    await user.click(FirstCard!);
-    expect(fn).not.toBeCalled();
+    const Cards = await screen.findAllByTestId('pokemon-card-link');
+    await user.click(Cards[1]);
+    expect(fetchPokemonByName).toBeCalled();
+    await screen.findByTestId('pokemon-details-description');
   });
 });

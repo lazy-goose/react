@@ -139,6 +139,7 @@ export default function PokeSearch() {
               placeholder="Search for pokemons"
               value={searchValue}
               onChange={handleSearchChange}
+              data-testid="search"
             />
             <Button type="submit" className={s.Submit}>
               Search

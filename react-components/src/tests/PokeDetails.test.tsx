@@ -1,49 +1,42 @@
-import { vi, describe, test, expect } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
-import App from '../App';
-import names from './data/names.json';
+import { describe, test, expect, beforeEach } from 'vitest';
+import { screen } from '@testing-library/react';
+import renderApp, { mockPokeAPI } from './renderApp';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 import pokemon from './data/pokemon.json';
-import pokemons from './data/pokemons.json';
-import { beforeEach } from 'node:test';
 
 describe('Tests for the Detailed Card component', () => {
-  const renderApp = () =>
-    render(
-      <MemoryRouter initialEntries={[`/pokemon/${pokemon.name}`]}>
-        <App />
-      </MemoryRouter>
-    );
+  let user: UserEvent;
+
+  const renderPokemonPage = () =>
+    renderApp({ path: `/pokemon/${pokemon.name}` });
 
   beforeEach(() => {
-    vi.mock('../API', async (importOriginal) => {
-      const mod = await importOriginal<typeof import('../API')>();
-      return {
-        ...mod,
-        fetchPokemonList: async () => names,
-        fetchPokemonByName: async () => pokemon,
-        searchPokemons: async () => [pokemons, pokemons.length],
-      };
-    });
+    user = userEvent.setup();
+    mockPokeAPI();
   });
 
   test('Check that a loading indicator is displayed while fetching data', async () => {
-    const { queryByTestId } = renderApp();
-    const BottomSlotChid = queryByTestId('bottom-slot')?.firstChild;
-    expect(BottomSlotChid).toHaveAttribute('data-testid', 'loader');
+    renderPokemonPage();
+    const Loader = screen.queryByTestId('details-loader');
+    expect(Loader).toBeInTheDocument();
+    const Description = await screen.findByTestId(
+      'pokemon-details-description'
+    );
+    expect(Description).toBeInTheDocument();
   });
 
   test('Make sure the detailed card component correctly displays the detailed card data', async () => {
-    renderApp();
-    const App = await screen.findByTestId('app');
-    expect(App).toMatchSnapshot();
+    renderPokemonPage();
+    const Details = await screen.findByTestId('pokemon-details');
+    await screen.findByTestId('pokemon-details-description');
+    expect(Details).toMatchSnapshot();
   });
 
   test('Ensure that clicking the close button hides the component', async () => {
-    renderApp();
+    renderPokemonPage();
     const PokeDetails = await screen.findByTestId('pokemon-details');
     const CloseButton = await screen.findByTestId('close-aside');
-    fireEvent.click(CloseButton);
+    await user.click(CloseButton);
     expect(PokeDetails).not.toBeInTheDocument();
   });
 });
