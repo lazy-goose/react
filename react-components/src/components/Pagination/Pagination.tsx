@@ -23,7 +23,7 @@ export default function Pagination(props: PaginationProps) {
   const pageNumbers = Array.from({ length: maxPage }).map((_, i) => i + 1);
 
   return (
-    <ul className={jcn(s.PageList, className)}>
+    <ul className={jcn(s.PageList, className)} data-testid="pagination">
       {pageNumbers.map((n) => {
         const isActive = currentPage === n || undefined;
         return (
@@ -33,6 +33,7 @@ export default function Pagination(props: PaginationProps) {
               className={s.PageItemButton}
               disabled={isActive}
               onClick={() => onPageChange(n)}
+              data-testid="page-button"
             >
               {n}
             </button>

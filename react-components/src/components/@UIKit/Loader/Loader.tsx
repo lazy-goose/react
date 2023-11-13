@@ -13,6 +13,7 @@ export default function Loader(props: LoaderProps) {
     <div
       className={jcn(s.Container, className)}
       style={{ '--delay': delay } as CSSProperties}
+      data-testid="loader"
     >
       <div className={s.Loader} />
     </div>

@@ -7,7 +7,7 @@ import PokeDetails from './components/PokeDetails/PokeDetails';
 
 export default function App() {
   return (
-    <div className={s.App}>
+    <div className={s.App} data-testid="app">
       <ErrorBoundary fallback={<ErrorPage />}>
         <Routes>
           <Route path="/" element={<MainLayout />}>

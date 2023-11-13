@@ -10,7 +10,7 @@ import jcn from '../../../utils/joinClassNames';
 import { PokemonList, fetchPokemonList, searchPokemons } from '../../../API';
 import Pagination from '../../../components/Pagination/Pagination';
 import { usePokemons } from '../../../slices/Pokemons';
-import { useSearchValue } from '../../../slices/SearchValue';
+import { STORAGE_SEARCH, useSearchValue } from '../../../slices/SearchValue';
 
 export default function PokeSearch() {
   const { pokemon: pokemonName = '' } = useParams();
@@ -85,6 +85,7 @@ export default function PokeSearch() {
       );
       setPokemonRenderArray(searchedPokemons);
       setPageCount(total);
+      localStorage.setItem(STORAGE_SEARCH, searchValue.trimEnd());
     } catch (error) {
       setError(error as Error);
     } finally {
@@ -170,7 +171,7 @@ export default function PokeSearch() {
           )}
         </form>
       </section>
-      <section className={s.BottomSlot}>
+      <section className={s.BottomSlot} data-testid="bottom-slot">
         {isSearchFetching || isPageFetching ? (
           <Loader className={s.Loader} />
         ) : (

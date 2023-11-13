@@ -15,7 +15,7 @@ export default function MainLayout() {
         <main className={s.MainLayout}>
           <PokeSearch />
           {outlet && (
-            <aside className={s.Aside}>
+            <aside className={s.Aside} data-testid="aside">
               <div className={s.AsideSticky}>
                 <NavLink
                   to={{
@@ -23,6 +23,7 @@ export default function MainLayout() {
                     search: searchParams.toString(),
                   }}
                   className={s.AsideCloseButton}
+                  data-testid="close-aside"
                 >
                   X
                 </NavLink>

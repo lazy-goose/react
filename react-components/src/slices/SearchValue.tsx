@@ -32,4 +32,4 @@ const SearchValueProvider = (props: { children: ReactNode }) => {
   return <Context.Provider value={[searchValue, setSearchValue]} {...props} />;
 };
 
-export { useSearchValue, SearchValueProvider };
+export { STORAGE_SEARCH, useSearchValue, SearchValueProvider };
