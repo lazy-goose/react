@@ -8,6 +8,7 @@ export default defineConfig({
   base: settings.base,
   test: {
     globals: true,
+    reporters: 'verbose',
     environment: 'jsdom',
     setupFiles: ['./src/tests/setupTests.ts'],
     coverage: {
