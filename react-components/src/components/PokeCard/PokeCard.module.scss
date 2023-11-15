@@ -1,0 +1,53 @@
+@use '../../utils/sass/mixins.scss';
+
+.PokeCard {
+  border: 1px solid transparent;
+  &.Active {
+    pointer-events: none;
+    border-color: var(--link);
+  }
+  @include mixins.hover {
+    border-color: var(--link);
+  }
+}
+
+.LinkWrapper {
+  padding: 1.5rem 1rem;
+  display: block;
+  text-decoration: none;
+  > *:not(:first-child) {
+    margin-block: 1rem 0;
+  }
+}
+
+.ImageContainer {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.Image {
+  font-size: 1.75rem;
+  display: grid;
+  align-items: center;
+  &::before {
+    position: absolute;
+    left: 0;
+  }
+}
+
+.ImageFallbackBlock {
+  display: grid;
+  place-content: center;
+  font-size: 3.25em;
+  font-weight: bold;
+}
+
+.Name {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.Types {
+  font-size: 1.5em;
+}

@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+. "`dirname -- "$0"`/_init"
+
+npm run lint

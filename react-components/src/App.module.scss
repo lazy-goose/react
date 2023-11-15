@@ -1,0 +1,30 @@
+.App {
+  --main: #800080;
+  --link: #0000ff;
+  --link-active: #ff0000;
+  --text: #000000;
+  --text-on-main: #ffffff;
+  --disabled: #808080;
+  --warning: #ffa500;
+  --neutral: #edeaea;
+  --background: #ffffff;
+}
+
+:global {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    box-sizing: border-box;
+  }
+}
+
+.App {
+  height: 100%;
+  color: var(--text);
+  font-family: 'Alegreya Sans', sans-serif;
+}
