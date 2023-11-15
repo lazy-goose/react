@@ -1,10 +1,12 @@
+@use '../../utils/sass/mixins.scss';
+
 .PokeCard {
   border: 1px solid transparent;
   &.Active {
     pointer-events: none;
+    border-color: var(--link);
   }
-  &.Active,
-  &:hover {
+  @include mixins.hover {
     border-color: var(--link);
   }
 }
