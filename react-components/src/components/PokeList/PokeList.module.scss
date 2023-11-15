@@ -8,8 +8,14 @@
 .PokeGrid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(16.5rem, 1fr));
+  justify-items: center;
+  justify-content: space-around;
+  gap: 2rem;
+  > * {
+    max-width: 20rem;
+    width: 100%;
+  }
 }
 
 .NoPokemons {

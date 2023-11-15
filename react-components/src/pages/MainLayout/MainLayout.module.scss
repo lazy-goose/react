@@ -1,41 +1,41 @@
+@use 'sass:math';
+
+$container-top-pad: 1rem;
+$container-bot-pad: 2rem;
+$container-inline-pad: 1rem;
+
 .MainLayout {
   min-height: 100%;
   max-width: 120rem;
-  padding-inline: 1rem;
+  padding-top: $container-top-pad;
+  padding-inline: $container-inline-pad;
   margin-inline: auto;
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 2rem;
 
   @media screen and (max-width: 60rem) {
-    grid-template-columns: auto;
+    display: block;
   }
 }
 
-.LinkWrapper {
-  text-decoration: none;
-  color: inherit;
-
-  &.InActive {
-    cursor: default;
-  }
+.Main {
+  padding-bottom: $container-bot-pad;
 }
 
 .Aside {
-  max-width: 100%;
+  max-width: calc(100% - #{2 * $container-inline-pad});
   width: 30rem;
-  height: 100%;
-  border: 1px solid var(--neutral);
+  outline: 1px solid var(--neutral);
   background-color: var(--background);
 
   &Sticky {
-    max-height: 100lvh;
+    height: calc(100svh - #{$container-bot-pad});
     position: sticky;
-    top: 0.625rem;
+    top: $container-top-pad;
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    padding-bottom: 5rem;
     overflow-y: auto;
     box-sizing: border-box;
   }
@@ -49,11 +49,8 @@
 
   @media screen and (max-width: 60rem) {
     position: fixed;
-    top: 0;
-    right: 0;
+    top: $container-top-pad;
+    right: $container-inline-pad;
     overflow-y: auto;
-    &Sticky {
-      position: static;
-    }
   }
 }

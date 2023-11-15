@@ -12,8 +12,10 @@ export default function MainLayout() {
   return (
     <PokemonsProvider>
       <SearchValueProvider>
-        <main className={s.MainLayout}>
-          <PokeSearch />
+        <div className={s.MainLayout}>
+          <main className={s.Main}>
+            <PokeSearch />
+          </main>
           {outlet && (
             <aside className={s.Aside} data-testid="aside">
               <div className={s.AsideSticky}>
@@ -31,7 +33,7 @@ export default function MainLayout() {
               </div>
             </aside>
           )}
-        </main>
+        </div>
       </SearchValueProvider>
     </PokemonsProvider>
   );

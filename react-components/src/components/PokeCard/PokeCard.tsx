@@ -27,6 +27,8 @@ export default function PokeCard(props: PokeCardProps) {
         <div className={s.ImageContainer}>
           {imageUrl ? (
             <img
+              width={96 * 2}
+              height={96 * 2}
               className={s.Image}
               src={imageUrl}
               alt={imageAlt || `${name} pokemon`}
