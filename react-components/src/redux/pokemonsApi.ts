@@ -58,8 +58,23 @@ export const pokemonsApi = createApi({
   }),
 });
 
-export const {
-  useGetPokemonByNameQuery,
-  useGetPokemonsListQuery,
-  useGetPokemonsQuery,
-} = pokemonsApi;
+const useGetPokemons = (params: {
+  search: string;
+  page?: number;
+  limit?: number;
+}) => {
+  const { search, page, limit } = params;
+  const { data: list = [], isSuccess } =
+    pokemonsApi.useGetPokemonsListQuery(undefined);
+  const { data = [], ...pass } = pokemonsApi.useGetPokemonsQuery(
+    { search, list, page, limit },
+    { skip: !isSuccess }
+  );
+  return {
+    data: data[0],
+    ...pass,
+  };
+};
+
+export const { useGetPokemonByNameQuery } = pokemonsApi;
+export { useGetPokemons };
