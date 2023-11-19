@@ -3,7 +3,7 @@ import s from './App.module.scss';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 import MainLayout from './pages/MainLayout/MainLayout';
-import PokeDetails from './components/PokeDetails/PokeDetails';
+import PokeDetails from './pages/MainLayout/PokeDetails/PokeDetails';
 
 export default function App() {
   return (

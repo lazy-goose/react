@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import s from './PokeDetails.module.scss';
-import Loader from '../@UIKit/Loader/Loader';
-import { useGetPokemonByNameQuery } from '../../redux';
+import Loader from '../../../components/@UIKit/Loader/Loader';
+import { useGetPokemonByNameQuery } from '../../../redux';
 
 export default function PokeDetails() {
   const { pokemon: pokemonName = '' } = useParams();

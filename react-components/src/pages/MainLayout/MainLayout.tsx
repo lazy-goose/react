@@ -1,7 +1,7 @@
 import { useOutlet, useSearchParams, NavLink } from 'react-router-dom';
 import PokeSearch from './PokeSearch/PokeSearch';
 import s from './MainLayout.module.scss';
-import PokeDetails from '../../components/PokeDetails/PokeDetails';
+import PokeDetails from './PokeDetails/PokeDetails';
 import { PokemonsProvider } from '../../slices/Pokemons';
 import { SearchValueProvider } from '../../slices/SearchValue';
 
