@@ -12,7 +12,9 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
   configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(pokemonsApi.middleware),
+      getDefaultMiddleware({
+        serializableCheck: false,
+      }).concat(pokemonsApi.middleware),
     preloadedState,
   });
 
