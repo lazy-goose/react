@@ -1,34 +1,17 @@
 import { useParams } from 'react-router-dom';
-import { IPokemon } from 'pokeapi-typescript';
-import { fetchPokemonByName } from '../../API';
 import s from './PokeDetails.module.scss';
-import { useEffect, useState } from 'react';
 import Loader from '../@UIKit/Loader/Loader';
+import { useGetPokemonByNameQuery } from '../../redux';
 
 export default function PokeDetails() {
   const { pokemon: pokemonName = '' } = useParams();
-  const [isFetching, setIsFetching] = useState(true);
-  const [error, setIsError] = useState<Error>();
-  const [pokemon, setPokemon] = useState<IPokemon>();
+  const {
+    data: pokemon,
+    isError,
+    isFetching,
+  } = useGetPokemonByNameQuery(pokemonName);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        if (!pokemonName) {
-          return;
-        }
-        setIsFetching(true);
-        const pokemon = await fetchPokemonByName(pokemonName);
-        setPokemon(pokemon);
-      } catch (error) {
-        setIsError(error as Error);
-      } finally {
-        setIsFetching(false);
-      }
-    })();
-  }, [pokemonName]);
-
-  if (error) throw error;
+  if (isError) throw new Error('Jump to ErrorBoundary');
 
   return (
     <div className={s.PokeDetails} data-testid="pokemon-details">
