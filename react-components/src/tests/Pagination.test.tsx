@@ -1,6 +1,6 @@
 import { vi, describe, test, expect, beforeEach } from 'vitest';
 import { screen } from '@testing-library/react';
-import renderApp, { mockPokeAPI } from './renderApp';
+import renderApp, { mockPokeAPI } from './utils/renderApp';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 
 describe('Tests for the Pagination component', () => {

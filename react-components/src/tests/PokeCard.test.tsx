@@ -3,15 +3,15 @@ import { render, screen } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import PokeCard from '../components/PokeCard/PokeCard';
-import stubPokemon from './data/pokemon.json';
-import renderApp, { mockPokeAPI } from './renderApp';
+import pokemon from './data/pikachu.json';
+import renderApp, { mockPokeAPI } from './utils/renderApp';
 import * as API from '../API';
 
 const pokemonData = {
-  name: stubPokemon.name,
-  imageUrl: stubPokemon.sprites.front_default,
-  imageAlt: stubPokemon.name,
-  types: stubPokemon.types.map(({ type: { name } }) => name),
+  name: pokemon.name,
+  imageUrl: pokemon.sprites.front_default,
+  imageAlt: pokemon.name,
+  types: pokemon.types.map(({ type: { name } }) => name),
 } as const;
 
 describe('Tests for the Card component', () => {

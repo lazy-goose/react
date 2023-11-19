@@ -2,11 +2,11 @@ import { vi } from 'vitest';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { Provider } from 'react-redux';
-import { RootState, setupStore } from '../redux';
-import App from '../App';
-import names from './data/names.json';
-import pokemons from './data/pokemons.json';
-import pokemon from './data/pokemon.json';
+import { RootState, setupStore } from '../../redux';
+import App from '../../App';
+import names from '../data/names.json';
+import pokemons from '../data/pokemons.json';
+import pokemon from '../data/pikachu.json';
 
 type RenderAppParams = {
   path?: string;
@@ -26,7 +26,7 @@ const renderApp = ({ path = '/', preloadedState }: RenderAppParams = {}) => {
 
 const mockPokeAPI = () => {
   vi.mock('../API', async (importOriginal) => {
-    const mod = await importOriginal<typeof import('../API')>();
+    const mod = await importOriginal<typeof import('../../API')>();
     return {
       ...mod,
       fetchPokemonList: async () => names,

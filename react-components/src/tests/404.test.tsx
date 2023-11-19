@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { screen } from '@testing-library/react';
-import renderApp, { mockPokeAPI } from './renderApp';
+import renderApp, { mockPokeAPI } from './utils/renderApp';
 
 describe('Tests for the 404 Page component', () => {
   beforeEach(() => {

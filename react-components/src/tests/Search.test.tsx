@@ -1,7 +1,7 @@
 import { vi, describe, expect, test, beforeEach } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
-import renderApp, { mockPokeAPI } from './renderApp';
+import renderApp, { mockPokeAPI } from './utils/renderApp';
 
 describe('Tests for the Search component', () => {
   let user: UserEvent;

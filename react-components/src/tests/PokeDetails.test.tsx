@@ -1,8 +1,8 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { screen } from '@testing-library/react';
-import renderApp, { mockPokeAPI } from './renderApp';
+import renderApp, { mockPokeAPI } from './utils/renderApp';
 import userEvent, { UserEvent } from '@testing-library/user-event';
-import pokemon from './data/pokemon.json';
+import pokemon from './data/pikachu.json';
 
 describe('Tests for the Detailed Card component', () => {
   let user: UserEvent;
