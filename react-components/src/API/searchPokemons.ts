@@ -32,5 +32,8 @@ export async function searchPokemons(
     (p) => p.status === 'fulfilled'
   ) as PromiseFulfilledResult<IPokemon>[];
 
-  return [descriptions.map((d) => d.value), filtered.length] as const;
+  return [descriptions.map((d) => d.value), filtered.length] as [
+    IPokemon[],
+    number,
+  ];
 }
