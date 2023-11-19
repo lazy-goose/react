@@ -33,13 +33,8 @@ describe('Tests for the Card component', () => {
 
   test('Ensure that the card component renders the relevant card data', async () => {
     renderPokeCard();
-    const { name, imageUrl, types } = pokemonData;
-    const Name = await screen.findByText(name);
-    const Image = await screen.findByAltText(name);
-    const Types = await screen.findByText(`Types: ${types.join(', ')}`);
-    expect(Name).toBeInTheDocument();
-    expect(Image).toHaveAttribute('src', imageUrl);
-    expect(Types).toBeInTheDocument();
+    const Card = await screen.findByTestId('pokemon-card');
+    expect(Card).toMatchSnapshot();
   });
 
   test('Validate that clicking on a card opens a detailed card component', async () => {

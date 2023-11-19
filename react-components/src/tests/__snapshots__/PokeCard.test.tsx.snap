@@ -1,0 +1,37 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Tests for the Card component > Ensure that the card component renders the relevant card data 1`] = `
+<div
+  class="_PokeCard_bf7019"
+  data-testid="pokemon-card"
+>
+  <a
+    class="_LinkWrapper_bf7019"
+    data-testid="pokemon-card-link"
+    href="/pokemon/pikachu"
+  >
+    <div
+      class="_ImageContainer_bf7019"
+    >
+      <img
+        alt="pikachu"
+        class="_Image_bf7019"
+        height="192"
+        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
+        width="192"
+      />
+    </div>
+    <h3
+      class="_Name_bf7019"
+    >
+      pikachu
+    </h3>
+    <p
+      class="_Types_bf7019"
+    >
+      Types: 
+      electric
+    </p>
+  </a>
+</div>
+`;
