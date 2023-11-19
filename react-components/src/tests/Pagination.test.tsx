@@ -9,7 +9,7 @@ describe('Tests for the Pagination component', () => {
   });
 
   test('Make sure the component updates URL query parameter when page changes', async () => {
-    const user = userEvent.setup()
+    const user = userEvent.setup();
     renderApp({ path: '/?page=1&pageSize=2' });
     const setParam = vi.spyOn(URLSearchParams.prototype, 'set');
     const Buttons = await screen.findAllByTestId('page-button');

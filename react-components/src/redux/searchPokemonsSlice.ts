@@ -68,6 +68,5 @@ const searchPokemonsSlice = createSlice({
   },
 });
 
-export const { setSearch, setPage, setPageSize } =
-  searchPokemonsSlice.actions;
+export const { setSearch, setPage, setPageSize } = searchPokemonsSlice.actions;
 export default searchPokemonsSlice.reducer;
