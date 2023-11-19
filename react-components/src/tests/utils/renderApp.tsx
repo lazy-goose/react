@@ -25,7 +25,7 @@ const renderApp = ({ path = '/', preloadedState }: RenderAppParams = {}) => {
 };
 
 const mockPokeAPI = () => {
-  vi.mock('../API', async (importOriginal) => {
+  vi.mock('../../API', async (importOriginal) => {
     const mod = await importOriginal<typeof import('../../API')>();
     return {
       ...mod,
