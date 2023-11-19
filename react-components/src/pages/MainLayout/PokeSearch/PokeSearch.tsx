@@ -1,5 +1,6 @@
-import { ChangeEvent, FormEvent, useEffect, useState, useRef } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import s from './PokeSearch.module.scss';
 import TextInput from '../../../components/@UIKit/TextInput/TextInput';
 import Button from '../../../components/@UIKit/Button/Button';
@@ -7,107 +8,87 @@ import LinkButton from '../../../components/@UIKit/LinkButton/LinkButton';
 import Loader from '../../../components/@UIKit/Loader/Loader';
 import PokeList from '../../../components/PokeList/PokeList';
 import jcn from '../../../utils/joinClassNames';
-import { PokemonList, fetchPokemonList, searchPokemons } from '../../../API';
 import Pagination from '../../../components/Pagination/Pagination';
-import { usePokemons } from '../../../slices/Pokemons';
-import { STORAGE_SEARCH, useSearchValue } from '../../../slices/SearchValue';
+import {
+  RootState,
+  STORAGE_SEARCH,
+  setPage,
+  setPageSize,
+  setSearch,
+  useGetPokemons,
+} from '../../../redux';
+
+const DEFAULT_PAGE = 1;
+const DEFAULT_PAGE_SIZE = 150;
 
 export default function PokeSearch() {
   const { pokemon: pokemonName = '' } = useParams();
-  const pokemonList = useRef<PokemonList>([]);
-
-  const [isSearchFetching, setIsSearchFetching] = useState(true);
-  const [isPageFetching, setIsPageFetching] = useState(true);
-  const [error, setError] = useState<Error>();
-  const [pokemonRenderArray, setPokemonRenderArray] = usePokemons();
-  const [pageCount, setPageCount] = useState(1);
-  const [searchValue, setSearchValue] = useSearchValue();
-
-  const DEFAULT_PAGE = 1;
-  const DEFAULT_PAGE_SIZE = 150;
 
   const [searchParams, setSearchParams] = useSearchParams({
+    search: localStorage.getItem(STORAGE_SEARCH) || '',
     page: String(DEFAULT_PAGE),
     pageSize: String(DEFAULT_PAGE_SIZE),
   });
+  const searchQuery = searchParams.get('search') || '';
+  const pageQuery = Number(searchParams.get('page') || DEFAULT_PAGE);
+  const pageSizeQuery = Number(searchParams.get('pageSize')) || null;
 
-  const pageQuery = searchParams.get('page') || '';
-  const pageSizeQuery = searchParams.get('pageSize') || '';
+  const dispatch = useDispatch();
 
-  const page = Number(pageQuery || DEFAULT_PAGE);
-  const pageSize = Number(pageSizeQuery || DEFAULT_PAGE_SIZE);
+  const isSearchFetching = useSelector(
+    (state: RootState) => state.search.isFetchingPokemons
+  );
+  const isPageFetching = isSearchFetching;
+
+  const search = useSelector((state: RootState) => state.search.search);
+  const page = useSelector((state: RootState) => state.search.page);
+  const pageSize = useSelector((state: RootState) => state.search.pageSize);
+  const total = useSelector((state: RootState) => state.search.total);
+
+  const { data: pokemonRenderArray = [], isError: getPokemonsError } =
+    useGetPokemons({
+      search,
+      page: page,
+      limit: pageSize,
+    });
 
   useEffect(() => {
-    (async () => {
-      try {
-        if (!pokemonList.current.length) {
-          pokemonList.current = await fetchPokemonList();
-        }
-        const [searchedPokemons, total] = await searchPokemons(
-          searchValue,
-          pokemonList.current,
-          page,
-          pageSize
-        );
-        if (page <= Math.ceil(total / pageSize)) {
-          setPokemonRenderArray(searchedPokemons);
-          setPageCount(total);
-        } else {
-          setSearchParams((params) => {
-            params.set('page', '1');
-            return params;
-          });
-        }
-      } catch (error) {
-        setError(error as Error);
-      } finally {
-        setIsSearchFetching(false);
-        setIsPageFetching(false);
-      }
-    })();
-  }, [page]);
+    dispatch(setPage(pageQuery));
+    dispatch(setPageSize(pageSizeQuery || DEFAULT_PAGE_SIZE));
+  }, []);
+
+  const MAX_PAGE_SIZE = Math.ceil(total / (pageSizeQuery || DEFAULT_PAGE_SIZE));
+
+  const [isError, setIsError] = useState(getPokemonsError);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    try {
-      e.preventDefault();
-      setIsSearchFetching(true);
-      if (page !== 1) {
-        setSearchParams((params) => {
-          params.set('page', String(DEFAULT_PAGE));
-          return params;
-        });
-      }
-      const [searchedPokemons, total] = await searchPokemons(
-        searchValue,
-        pokemonList.current || [],
-        1,
-        pageSize
-      );
-      setPokemonRenderArray(searchedPokemons);
-      setPageCount(total);
-      localStorage.setItem(STORAGE_SEARCH, searchValue.trimEnd());
-    } catch (error) {
-      setError(error as Error);
-    } finally {
-      setIsSearchFetching(false);
-      setIsPageFetching(false);
+    e.preventDefault();
+    if (pageQuery > MAX_PAGE_SIZE) {
+      setSearchParams((params) => {
+        params.set('page', String(DEFAULT_PAGE));
+        return params;
+      });
+      dispatch(setPage(DEFAULT_PAGE));
+    } else {
+      dispatch(setPage(pageQuery));
     }
+    dispatch(setSearch(searchQuery));
+    dispatch(setPageSize(pageSizeQuery || DEFAULT_PAGE_SIZE));
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value.trimEnd());
-  };
-
-  const handleErrorButtonClick = () => {
-    setError(new Error('No errors occurred? Click here to throw one!'));
-  };
-
-  const handlePageChange = (p: number) => {
     setSearchParams((params) => {
-      params.set('page', String(p));
+      params.set('search', e.target.value.trimEnd());
       return params;
     });
-    setIsPageFetching(true);
+  };
+
+  const handlePageChange = (page: number) => {
+    setSearchParams((params) => {
+      params.set('page', String(page));
+      return params;
+    });
+    dispatch(setPage(page));
   };
 
   const handlePageSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -117,9 +98,14 @@ export default function PokeSearch() {
       params.set('pageSize', value);
       return params;
     });
+    dispatch(setPageSize(Number(value) || DEFAULT_PAGE_SIZE));
   };
 
-  if (error) throw error;
+  const handleErrorButtonClick = () => {
+    setIsError(true);
+  };
+
+  if (isError) throw new Error('Jump to ErrorBoundary');
 
   return (
     <div>
@@ -140,7 +126,7 @@ export default function PokeSearch() {
           <fieldset className={s.Search}>
             <TextInput
               placeholder="Search for pokemons"
-              value={searchValue}
+              value={searchQuery}
               onChange={handleSearchChange}
               data-testid="search"
             />
@@ -154,25 +140,25 @@ export default function PokeSearch() {
               No errors occurred? Click here to throw one!
             </LinkButton>
           </fieldset>
-          {!isSearchFetching && (
+          {
             <fieldset className={s.Pagination}>
               <input
                 className={s.PageSizeInput}
                 // Bug with type="number"
                 type="text"
-                value={pageSizeQuery}
-                placeholder={`${DEFAULT_PAGE_SIZE}`}
+                value={pageSizeQuery || ''}
+                placeholder={String(DEFAULT_PAGE_SIZE)}
                 onChange={handlePageSizeChange}
               />
               <Pagination
                 className={s.Pages}
-                currentPage={page}
-                pageSize={pageSize}
-                totalCount={pageCount}
+                currentPage={pageQuery}
+                pageSize={pageSizeQuery || DEFAULT_PAGE_SIZE}
+                totalCount={total}
                 onPageChange={handlePageChange}
               />
             </fieldset>
-          )}
+          }
         </form>
       </section>
       <section className={s.BottomSlot} data-testid="bottom-slot">
