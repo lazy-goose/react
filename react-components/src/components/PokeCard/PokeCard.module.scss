@@ -37,9 +37,11 @@
 }
 
 .ImageFallbackBlock {
+  width: 96px * 2;
+  height: 96px * 2;
   display: grid;
   place-content: center;
-  font-size: 3.25em;
+  font-size: 6em;
   font-weight: bold;
 }
 
