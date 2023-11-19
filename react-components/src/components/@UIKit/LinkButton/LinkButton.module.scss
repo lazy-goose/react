@@ -1,0 +1,24 @@
+@use '../../../utils/sass/mixins.scss';
+
+.LinkButton {
+  all: unset;
+  font: inherit;
+  color: var(--link);
+  cursor: pointer;
+  transition-duration: 200ms;
+  transition-property: opacity background-color;
+
+  @include mixins.hover {
+    text-decoration: underline;
+  }
+
+  &:active {
+    opacity: 0.75;
+    color: var(--link-active);
+  }
+
+  &:disabled {
+    cursor: default;
+    background-color: var(--disabled);
+  }
+}
