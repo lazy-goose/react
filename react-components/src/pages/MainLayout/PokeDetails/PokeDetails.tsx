@@ -1,15 +1,15 @@
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import s from './PokeDetails.module.scss';
 import Loader from '../../../components/@UIKit/Loader/Loader';
-import { useGetPokemonByNameQuery } from '../../../redux';
+import { RootState, useGetPokemonByNameQuery } from '../../../redux';
 
 export default function PokeDetails() {
   const { pokemon: pokemonName = '' } = useParams();
-  const {
-    data: pokemon,
-    isError,
-    isFetching,
-  } = useGetPokemonByNameQuery(pokemonName);
+  const { data: pokemon, isError } = useGetPokemonByNameQuery(pokemonName);
+  const isFetching = useSelector(
+    (state: RootState) => state.search.isFetchingDescription
+  );
 
   if (isError) throw new Error('Jump to ErrorBoundary');
 
