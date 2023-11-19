@@ -1,6 +1,6 @@
 import { vi, describe, test, expect, beforeEach, SpyInstance } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import userEvent, { UserEvent } from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import PokeCard from '../components/PokeCard/PokeCard';
 import pokemon from './data/pikachu.json';
@@ -23,10 +23,8 @@ describe('Tests for the Card component', () => {
     );
 
   let fetchPokemonByName: SpyInstance;
-  let user: UserEvent;
 
   beforeEach(() => {
-    user = userEvent.setup();
     mockPokeAPI();
     fetchPokemonByName = vi.spyOn(API, 'fetchPokemonByName');
   });
@@ -38,6 +36,7 @@ describe('Tests for the Card component', () => {
   });
 
   test('Validate that clicking on a card opens a detailed card component', async () => {
+    const user = userEvent.setup();
     renderApp();
     const Cards = await screen.findAllByTestId('pokemon-card-link');
     await user.click(Cards[0]);
@@ -46,6 +45,7 @@ describe('Tests for the Card component', () => {
   });
 
   test('Check that clicking triggers an additional API call to fetch detailed information', async () => {
+    const user = userEvent.setup();
     renderApp();
     const Cards = await screen.findAllByTestId('pokemon-card-link');
     await user.click(Cards[1]);

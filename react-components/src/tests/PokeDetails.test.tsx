@@ -1,17 +1,14 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { screen } from '@testing-library/react';
 import renderApp, { mockPokeAPI } from './utils/renderApp';
-import userEvent, { UserEvent } from '@testing-library/user-event';
+import userEvent  from '@testing-library/user-event';
 import pokemon from './data/pikachu.json';
 
 describe('Tests for the Detailed Card component', () => {
-  let user: UserEvent;
-
   const renderPokemonPage = () =>
     renderApp({ path: `/pokemon/${pokemon.name}` });
 
   beforeEach(() => {
-    user = userEvent.setup();
     mockPokeAPI();
   });
 
@@ -33,6 +30,7 @@ describe('Tests for the Detailed Card component', () => {
   });
 
   test('Ensure that clicking the close button hides the component', async () => {
+    const user = userEvent.setup();
     renderPokemonPage();
     const PokeDetails = await screen.findByTestId('pokemon-details');
     const CloseButton = await screen.findByTestId('close-aside');
