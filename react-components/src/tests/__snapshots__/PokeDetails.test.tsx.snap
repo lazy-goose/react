@@ -2,16 +2,16 @@
 
 exports[`Tests for the Detailed Card component > Make sure the detailed card component correctly displays the detailed card data 1`] = `
 <div
-  class="_PokeDetails_d5cb5b"
+  class="_PokeDetails_978dd8"
   data-testid="pokemon-details"
 >
   <h2
-    class="_Heading_d5cb5b"
+    class="_Heading_978dd8"
   >
     pikachu
   </h2>
   <div
-    class="_Container_d5cb5b"
+    class="_Container_978dd8"
   >
     <ul
       data-testid="pokemon-details-description"
@@ -46,7 +46,7 @@ exports[`Tests for the Detailed Card component > Make sure the detailed card com
         </h4>
         <ul>
           <li
-            class="_KeyValue_d5cb5b"
+            class="_KeyValue_978dd8"
           >
             <span>
               hp
@@ -56,7 +56,7 @@ exports[`Tests for the Detailed Card component > Make sure the detailed card com
             </span>
           </li>
           <li
-            class="_KeyValue_d5cb5b"
+            class="_KeyValue_978dd8"
           >
             <span>
               attack
@@ -66,7 +66,7 @@ exports[`Tests for the Detailed Card component > Make sure the detailed card com
             </span>
           </li>
           <li
-            class="_KeyValue_d5cb5b"
+            class="_KeyValue_978dd8"
           >
             <span>
               defense
@@ -76,7 +76,7 @@ exports[`Tests for the Detailed Card component > Make sure the detailed card com
             </span>
           </li>
           <li
-            class="_KeyValue_d5cb5b"
+            class="_KeyValue_978dd8"
           >
             <span>
               special-attack
@@ -86,7 +86,7 @@ exports[`Tests for the Detailed Card component > Make sure the detailed card com
             </span>
           </li>
           <li
-            class="_KeyValue_d5cb5b"
+            class="_KeyValue_978dd8"
           >
             <span>
               special-defense
@@ -96,7 +96,7 @@ exports[`Tests for the Detailed Card component > Make sure the detailed card com
             </span>
           </li>
           <li
-            class="_KeyValue_d5cb5b"
+            class="_KeyValue_978dd8"
           >
             <span>
               speed
