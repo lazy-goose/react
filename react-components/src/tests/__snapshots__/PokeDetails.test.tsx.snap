@@ -79,7 +79,7 @@ exports[`Tests for the Detailed Card component > Make sure the detailed card com
             class="_KeyValue_978dd8"
           >
             <span>
-              special-attack
+              special attack
             </span>
             <span>
               50
@@ -89,7 +89,7 @@ exports[`Tests for the Detailed Card component > Make sure the detailed card com
             class="_KeyValue_978dd8"
           >
             <span>
-              special-defense
+              special defense
             </span>
             <span>
               50

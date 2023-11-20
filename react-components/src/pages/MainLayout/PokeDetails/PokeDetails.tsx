@@ -13,9 +13,11 @@ export default function PokeDetails() {
 
   if (isError) throw new Error('Jump to ErrorBoundary');
 
+  const noDash = (s: string) => s.replaceAll(/[-_]/g, ' ');
+
   return (
     <div className={s.PokeDetails} data-testid="pokemon-details">
-      <h2 className={s.Heading}>{pokemonName}</h2>
+      <h2 className={s.Heading}>{noDash(pokemonName)}</h2>
       <div className={s.Container}>
         {isFetching ? (
           <Loader className={s.Loader} testId="details-loader" />
@@ -37,10 +39,10 @@ export default function PokeDetails() {
               <h4>Stats</h4>
               <ul>
                 {pokemon?.stats
-                  .map((s) => [s.stat.name, s.base_stat])
+                  .map((s) => [s.stat.name, s.base_stat] as const)
                   .map(([n, v]) => (
                     <li key={n} className={s.KeyValue}>
-                      <span>{n}</span>
+                      <span>{noDash(n)}</span>
                       <span>{v}</span>
                     </li>
                   ))}

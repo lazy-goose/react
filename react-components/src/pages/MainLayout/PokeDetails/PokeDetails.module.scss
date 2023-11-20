@@ -1,6 +1,10 @@
 .PokeDetails {
   font-size: 1.5rem;
 
+  *::first-letter {
+    text-transform: capitalize;
+  }
+
   & > ul {
     margin-top: 0;
   }
@@ -16,7 +20,6 @@
 
   h4 {
     margin-block: 0.5em;
-    text-transform: capitalize;
   }
 }
 
