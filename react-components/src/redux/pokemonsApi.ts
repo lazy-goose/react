@@ -66,14 +66,11 @@ const useGetPokemons = (params: {
   const { search, page, limit } = params;
   const { data: list = [], isSuccess } =
     pokemonsApi.useGetPokemonsListQuery(undefined);
-  const { data = [], ...pass } = pokemonsApi.useGetPokemonsQuery(
+  const { data = [[], 1], ...pass } = pokemonsApi.useGetPokemonsQuery(
     { search, list, page, limit },
     { skip: !isSuccess }
   );
-  return {
-    data: data[0],
-    ...pass,
-  };
+  return { data, ...pass };
 };
 
 export const { useGetPokemonByNameQuery } = pokemonsApi;

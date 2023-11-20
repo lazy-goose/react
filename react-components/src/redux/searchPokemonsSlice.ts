@@ -39,6 +39,9 @@ const searchPokemonsSlice = createSlice({
     setPageSize: (state, action: PayloadAction<number>) => {
       state.pageSize = action.payload;
     },
+    setTotal: (state, action: PayloadAction<number>) => {
+      state.total = action.payload;
+    },
   },
   extraReducers: (builder) => {
     const api = pokemonsApi;
@@ -68,5 +71,6 @@ const searchPokemonsSlice = createSlice({
   },
 });
 
-export const { setSearch, setPage, setPageSize } = searchPokemonsSlice.actions;
+export const { setSearch, setPage, setPageSize, setTotal } =
+  searchPokemonsSlice.actions;
 export default searchPokemonsSlice.reducer;

@@ -15,6 +15,7 @@ import {
   setPage,
   setPageSize,
   setSearch,
+  setTotal,
   useGetPokemons,
 } from '../../../redux';
 
@@ -23,15 +24,21 @@ const DEFAULT_PAGE_SIZE = 150;
 
 export default function PokeSearch() {
   const { pokemon: pokemonName = '' } = useParams();
-
   const [searchParams, setSearchParams] = useSearchParams({
     search: localStorage.getItem(STORAGE_SEARCH) || '',
     page: String(DEFAULT_PAGE),
     pageSize: String(DEFAULT_PAGE_SIZE),
   });
-  const searchQuery = searchParams.get('search') || '';
-  const pageQuery = Number(searchParams.get('page') || DEFAULT_PAGE);
-  const pageSizeQuery = Number(searchParams.get('pageSize')) || null;
+
+  const query = {
+    search: searchParams.get('search'),
+    page: searchParams.get('page'),
+    pageSize: searchParams.get('pageSize'),
+  };
+
+  const searchFromQuery = query.search || '';
+  const pageFromQuery = Number(query.page || DEFAULT_PAGE);
+  const pageSizeFromQuery = Number(query.pageSize || DEFAULT_PAGE_SIZE);
 
   const dispatch = useDispatch();
 
@@ -43,37 +50,42 @@ export default function PokeSearch() {
   const search = useSelector((state: RootState) => state.search.search);
   const page = useSelector((state: RootState) => state.search.page);
   const pageSize = useSelector((state: RootState) => state.search.pageSize);
-  const total = useSelector((state: RootState) => state.search.total);
 
-  const { data: pokemonRenderArray = [], isError: getPokemonsError } =
-    useGetPokemons({
-      search,
-      page: page,
-      limit: pageSize,
-    });
+  const {
+    data: [pokemonRenderArray = [], total = 1],
+    isError: getPokemonsError,
+  } = useGetPokemons({
+    search,
+    page,
+    limit: pageSize,
+  });
 
   useEffect(() => {
-    dispatch(setPage(pageQuery));
-    dispatch(setPageSize(pageSizeQuery || DEFAULT_PAGE_SIZE));
+    dispatch(setSearch(query.search || ''));
+    dispatch(setPage(Number(query.page) || DEFAULT_PAGE));
+    dispatch(setPageSize(Number(query.pageSize) || DEFAULT_PAGE_SIZE));
   }, []);
 
-  const MAX_PAGE_SIZE = Math.ceil(total / (pageSizeQuery || DEFAULT_PAGE_SIZE));
-
-  const [isError, setIsError] = useState(getPokemonsError);
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (pageQuery > MAX_PAGE_SIZE) {
+  useEffect(() => {
+    const MAX_PAGE = Math.ceil(total / pageSizeFromQuery);
+    if (pageFromQuery > MAX_PAGE) {
       setSearchParams((params) => {
         params.set('page', String(DEFAULT_PAGE));
         return params;
       });
       dispatch(setPage(DEFAULT_PAGE));
     } else {
-      dispatch(setPage(pageQuery));
+      dispatch(setPage(pageFromQuery));
     }
-    dispatch(setSearch(searchQuery));
-    dispatch(setPageSize(pageSizeQuery || DEFAULT_PAGE_SIZE));
+  }, [total]);
+
+  const [isError, setIsError] = useState(getPokemonsError);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(setTotal(total));
+    dispatch(setSearch(searchFromQuery));
+    dispatch(setPageSize(pageSizeFromQuery));
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -98,7 +110,6 @@ export default function PokeSearch() {
       params.set('pageSize', value);
       return params;
     });
-    dispatch(setPageSize(Number(value) || DEFAULT_PAGE_SIZE));
   };
 
   const handleErrorButtonClick = () => {
@@ -126,7 +137,7 @@ export default function PokeSearch() {
           <fieldset className={s.Search}>
             <TextInput
               placeholder="Search for pokemons"
-              value={searchQuery}
+              value={searchFromQuery}
               onChange={handleSearchChange}
               data-testid="search"
             />
@@ -146,14 +157,14 @@ export default function PokeSearch() {
                 className={s.PageSizeInput}
                 // Bug with type="number"
                 type="text"
-                value={pageSizeQuery || ''}
+                value={query.pageSize || ''}
                 placeholder={String(DEFAULT_PAGE_SIZE)}
                 onChange={handlePageSizeChange}
               />
               <Pagination
                 className={s.Pages}
-                currentPage={pageQuery}
-                pageSize={pageSizeQuery || DEFAULT_PAGE_SIZE}
+                currentPage={pageFromQuery}
+                pageSize={pageSizeFromQuery}
                 totalCount={total}
                 onPageChange={handlePageChange}
               />
