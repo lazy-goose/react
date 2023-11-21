@@ -15,7 +15,7 @@ type RenderAppParams = {
 
 const renderApp = ({ path = '/', preloadedState }: RenderAppParams = {}) => {
   const store = setupStore(preloadedState);
-  render(
+  return render(
     <MemoryRouter initialEntries={[path]}>
       <Provider store={store}>
         <App />
