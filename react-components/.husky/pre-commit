@@ -2,5 +2,23 @@
 
 . "`dirname -- "$0"`/_init"
 
-npm run format:fix
-npm run lint
+NODE_BIN="./node_modules/.bin"
+GIT_FILES=`git diff --relative --cached --name-only --diff-filter=ACMR -- src | sed 's/ /\\ /g'`
+
+if [ -z "$GIT_FILES" ]; then
+  exit 0
+fi
+
+gray=`tput setaf 0`
+norm=`tput sgr0`
+
+heading "---- Typescript ----"
+echo "$GIT_FILES" | grep -E "\.(ts|tsx)$" | xargs "$NODE_BIN/tsc-files" --noEmit
+
+heading "----   Eslint   ----"
+echo "$GIT_FILES" | grep -E "\.(ts|tsx)$" | xargs -I {} "$NODE_BIN/eslint" {}
+
+echo "${gray}---- Prettier ----${norm}"
+echo "$GIT_FILES" | xargs "$NODE_BIN/prettier" --ignore-unknown --write
+
+echo "$GIT_FILES" | xargs git add

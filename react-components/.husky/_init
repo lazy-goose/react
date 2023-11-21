@@ -3,5 +3,4 @@
 set -e
 
 _dirname=`dirname -- "$0"`
-. "$_dirname/_/husky.sh"; cd "$_dirname"
-
+. "$_dirname/_/husky.sh"; cd "$_dirname/.."
