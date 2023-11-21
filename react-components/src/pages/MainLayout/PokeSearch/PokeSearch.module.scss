@@ -42,8 +42,13 @@
   gap: 0.5rem;
   grid-template-columns: auto 1fr;
   align-items: start;
-  > * {
+  & > input {
     height: 2rem;
+    margin-top: 2px;
+  }
+  & > ul {
+    height: 2rem;
+    padding-top: 2px;
   }
 }
 

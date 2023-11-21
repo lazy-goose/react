@@ -19,8 +19,8 @@
 
 .PageItemButton {
   font-size: 1rem;
-  min-height: 2em;
-  min-width: 2em;
+  min-height: 2rem;
+  aspect-ratio: 1;
   cursor: pointer;
   background: none;
   border: 1px solid var(--text);

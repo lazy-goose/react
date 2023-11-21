@@ -12,6 +12,10 @@
     text-decoration: underline;
   }
 
+  &:focus {
+    text-decoration: underline;
+  }
+
   &:active {
     opacity: 0.75;
     color: var(--link-active);
