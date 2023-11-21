@@ -1,15 +1,15 @@
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import s from './PokeDetails.module.scss';
 import Loader from '../../../components/@UIKit/Loader/Loader';
-import { RootState, useGetPokemonByNameQuery } from '../../../redux';
+import { useGetPokemonByNameQuery } from '../../../redux';
 
 export default function PokeDetails() {
   const { pokemon: pokemonName = '' } = useParams();
-  const { data: pokemon, isError } = useGetPokemonByNameQuery(pokemonName);
-  const isFetching = useSelector(
-    (state: RootState) => state.search.isFetchingDescription
-  );
+  const {
+    data: pokemon,
+    isError,
+    isLoading,
+  } = useGetPokemonByNameQuery(pokemonName);
 
   if (isError) throw new Error('Jump to ErrorBoundary');
 
@@ -19,7 +19,7 @@ export default function PokeDetails() {
     <div className={s.PokeDetails} data-testid="pokemon-details">
       <h2 className={s.Heading}>{noDash(pokemonName)}</h2>
       <div className={s.Container}>
-        {isFetching ? (
+        {isLoading ? (
           <Loader className={s.Loader} testId="details-loader" />
         ) : (
           <ul data-testid="pokemon-details-description">
