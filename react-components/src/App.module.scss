@@ -1,4 +1,4 @@
-.App {
+:root {
   --main: #800080;
   --link: #0000ff;
   --link-active: #ff0000;
@@ -20,6 +20,7 @@
   body {
     margin: 0;
     box-sizing: border-box;
+    background-color: var(--background);
   }
 }
 
