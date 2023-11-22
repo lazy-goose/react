@@ -9,8 +9,9 @@ if [ -z "$GIT_FILES" ]; then
   exit 0
 fi
 
-gray=`tput setaf 0`
-norm=`tput sgr0`
+heading() {
+  echo "`tput setaf 0`${1}`tput sgr0`"
+}
 
 heading "---- Typescript ----"
 echo "$GIT_FILES" | grep -E "\.(ts|tsx)$" | xargs "$NODE_BIN/tsc-files" --noEmit
@@ -18,7 +19,7 @@ echo "$GIT_FILES" | grep -E "\.(ts|tsx)$" | xargs "$NODE_BIN/tsc-files" --noEmit
 heading "----   Eslint   ----"
 echo "$GIT_FILES" | grep -E "\.(ts|tsx)$" | xargs -I {} "$NODE_BIN/eslint" {}
 
-echo "${gray}---- Prettier ----${norm}"
+heading "----  Prettier  ----"
 echo "$GIT_FILES" | xargs "$NODE_BIN/prettier" --ignore-unknown --write
 
 echo "$GIT_FILES" | xargs git add
