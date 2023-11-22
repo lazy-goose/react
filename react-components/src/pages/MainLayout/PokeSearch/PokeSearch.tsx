@@ -1,6 +1,5 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import s from './PokeSearch.module.scss';
 import TextInput from '../../../components/@UIKit/TextInput/TextInput';
 import Button from '../../../components/@UIKit/Button/Button';
@@ -9,105 +8,109 @@ import Loader from '../../../components/@UIKit/Loader/Loader';
 import PokeList from '../../../components/PokeList/PokeList';
 import jcn from '../../../utils/joinClassNames';
 import Pagination from '../../../components/Pagination/Pagination';
-import {
-  RootState,
-  STORAGE_SEARCH,
-  setPage,
-  setPageSize,
-  setSearch,
-  setTotal,
-  useGetPokemons,
-} from '../../../redux';
+import { useGetPokemons } from '../../../redux';
+
+const STORAGE_SEARCH = 'pokeSearchString';
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 150;
 
+enum Query {
+  Search = 'search',
+  Page = 'page',
+  PageSize = 'pageSize',
+}
+
 export default function PokeSearch() {
   const { pokemon: pokemonName = '' } = useParams();
   const [searchParams, setSearchParams] = useSearchParams({
-    search: localStorage.getItem(STORAGE_SEARCH) || '',
-    page: String(DEFAULT_PAGE),
-    pageSize: String(DEFAULT_PAGE_SIZE),
+    [Query.Search]: localStorage.getItem(STORAGE_SEARCH) || '',
+    [Query.Page]: String(DEFAULT_PAGE),
+    [Query.PageSize]: String(DEFAULT_PAGE_SIZE),
   });
 
   const query = {
-    search: searchParams.get('search'),
-    page: searchParams.get('page'),
-    pageSize: searchParams.get('pageSize'),
+    [Query.Search]: searchParams.get(Query.Search),
+    [Query.Page]: searchParams.get(Query.Page),
+    [Query.PageSize]: searchParams.get(Query.PageSize),
   };
 
   const searchFromQuery = query.search || '';
   const pageFromQuery = Number(query.page || DEFAULT_PAGE);
   const pageSizeFromQuery = Number(query.pageSize || DEFAULT_PAGE_SIZE);
 
-  const dispatch = useDispatch();
+  const useGetPokemonsParam = {
+    search: searchFromQuery,
+    page: pageFromQuery,
+    limit: pageSizeFromQuery,
+  } satisfies Parameters<typeof useGetPokemons>[0];
 
-  const isSearchFetching = useSelector(
-    (state: RootState) => state.search.isFetchingPokemons
-  );
-  const isPageFetching = isSearchFetching;
-
-  const search = useSelector((state: RootState) => state.search.search);
-  const page = useSelector((state: RootState) => state.search.page);
-  const pageSize = useSelector((state: RootState) => state.search.pageSize);
+  const [triggerGetPokemons, useGetPokemonsResult] =
+    useGetPokemons(useGetPokemonsParam);
 
   const {
-    data: [pokemonRenderArray = [], total = 1],
-    isError: getPokemonsError,
-  } = useGetPokemons({
-    search,
-    page,
-    limit: pageSize,
-  });
+    data: [pokemonRenderArray = [], total = 0],
+    isFetching: useGetPokemonsIsFetching,
+    isError: useGetPokemonsError,
+  } = useGetPokemonsResult;
 
-  useEffect(() => {
-    dispatch(setSearch(query.search || ''));
-    dispatch(setPage(Number(query.page) || DEFAULT_PAGE));
-    dispatch(setPageSize(Number(query.pageSize) || DEFAULT_PAGE_SIZE));
-  }, []);
+  const [isError, setIsError] = useState(useGetPokemonsError);
 
-  useEffect(() => {
-    const MAX_PAGE = Math.ceil(total / pageSizeFromQuery);
+  const MAX_PAGE = Math.ceil(total / pageSizeFromQuery);
+
+  const triggerSearch = (arg: Partial<typeof useGetPokemonsParam> = {}) => {
+    const params = {
+      ...useGetPokemonsParam,
+      ...arg,
+    };
     if (pageFromQuery > MAX_PAGE) {
       setSearchParams((params) => {
-        params.set('page', String(DEFAULT_PAGE));
+        params.set(Query.Page, '1');
         return params;
       });
-      dispatch(setPage(DEFAULT_PAGE));
+      triggerGetPokemons({ ...params, page: 1 });
     } else {
-      dispatch(setPage(pageFromQuery));
+      triggerGetPokemons(params);
     }
-  }, [total]);
+  };
 
-  const [isError, setIsError] = useState(getPokemonsError);
+  useEffect(() => {
+    if (pageFromQuery > MAX_PAGE) {
+      setSearchParams((params) => {
+        params.set(Query.Page, '1');
+        return params;
+      });
+    }
+  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(setTotal(total));
-    dispatch(setSearch(searchFromQuery));
-    dispatch(setPageSize(pageSizeFromQuery));
+    triggerSearch();
+    localStorage.setItem(STORAGE_SEARCH, searchFromQuery);
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trimEnd();
     setSearchParams((params) => {
-      params.set('search', e.target.value.trimEnd());
+      params.set(Query.Search, value);
       return params;
     });
+    localStorage.setItem(STORAGE_SEARCH, value);
   };
 
   const handlePageChange = (page: number) => {
     setSearchParams((params) => {
-      params.set('page', String(page));
+      params.set(Query.Page, String(page));
       return params;
     });
-    dispatch(setPage(page));
+    triggerSearch({ page });
   };
 
   const handlePageSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const value = e.target.value.replace(/\D/, '').replace(/^0/, '');
     setSearchParams((params) => {
-      params.set('pageSize', value);
+      params.set(Query.PageSize, value);
       return params;
     });
   };
@@ -128,10 +131,7 @@ export default function PokeSearch() {
       </a>
       <section className={s.TopSlot}>
         <form
-          className={jcn(
-            s.Form,
-            isSearchFetching || isPageFetching ? s._Disable : null
-          )}
+          className={jcn(s.Form, useGetPokemonsIsFetching ? s._Disable : null)}
           onSubmit={handleSubmit}
         >
           <fieldset className={s.Search}>
@@ -173,7 +173,7 @@ export default function PokeSearch() {
         </form>
       </section>
       <section className={s.BottomSlot} data-testid="bottom-slot">
-        {isSearchFetching || isPageFetching ? (
+        {useGetPokemonsIsFetching ? (
           <Loader className={s.Loader} />
         ) : (
           <PokeList

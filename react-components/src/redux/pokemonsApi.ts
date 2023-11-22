@@ -5,10 +5,12 @@ import {
   fetchPokemonList,
   searchPokemons,
 } from '../API';
+import { useEffect } from 'react';
 
 type CustomError = unknown;
 
 export const pokemonsApi = createApi({
+  tagTypes: ['PokemonsPage'],
   reducerPath: 'pokemonsApi',
   baseQuery: fakeBaseQuery<CustomError>(),
   endpoints: (builder) => ({
@@ -37,6 +39,7 @@ export const pokemonsApi = createApi({
           return { error };
         }
       },
+      keepUnusedDataFor: Infinity,
     }),
     getPokemons: builder.query<
       Awaited<ReturnType<typeof searchPokemons>>,
@@ -63,14 +66,17 @@ const useGetPokemons = (params: {
   page?: number;
   limit?: number;
 }) => {
-  const { search, page, limit } = params;
-  const { data: list = [], isSuccess } =
-    pokemonsApi.useGetPokemonsListQuery(undefined);
-  const { data = [[], 1], ...pass } = pokemonsApi.useGetPokemonsQuery(
-    { search, list, page, limit },
-    { skip: !isSuccess }
-  );
-  return { data, ...pass };
+  const { useGetPokemonsListQuery, useLazyGetPokemonsQuery } = pokemonsApi;
+  const { data: list = [], isSuccess } = useGetPokemonsListQuery();
+  const [triggerGetPokemons, { data = [], ...pass }] =
+    useLazyGetPokemonsQuery();
+  const lazyGetPokemons = (arg: typeof params) => {
+    if (isSuccess) {
+      triggerGetPokemons({ list, ...arg });
+    }
+  };
+  useEffect(() => lazyGetPokemons(params), [isSuccess]);
+  return [lazyGetPokemons, { data, ...pass }] as const;
 };
 
 export const { useGetPokemonByNameQuery } = pokemonsApi;

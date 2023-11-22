@@ -1,11 +1,9 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import type { PreloadedState } from '@reduxjs/toolkit';
 import { pokemonsApi } from './pokemonsApi';
-import searchPokemonsSlice from './searchPokemonsSlice';
 
 const rootReducer = combineReducers({
   [pokemonsApi.reducerPath]: pokemonsApi.reducer,
-  search: searchPokemonsSlice,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
@@ -23,4 +21,3 @@ export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = AppStore['dispatch'];
 
 export * from './pokemonsApi';
-export * from './searchPokemonsSlice';
