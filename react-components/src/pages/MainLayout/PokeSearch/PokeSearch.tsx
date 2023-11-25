@@ -9,6 +9,13 @@ import PokeList from '../../../components/PokeList/PokeList';
 import jcn from '../../../utils/joinClassNames';
 import Pagination from '../../../components/Pagination/Pagination';
 import { useGetPokemons } from '../../../redux';
+import { useDispatch } from 'react-redux';
+import {
+  setPage,
+  setPageSize,
+  setPokemons,
+  setSearch,
+} from '../../../redux/pokemonSlice';
 
 const STORAGE_SEARCH = 'pokeSearchString';
 
@@ -73,6 +80,15 @@ export default function PokeSearch() {
       triggerGetPokemons(params);
     }
   };
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setSearch(searchFromQuery));
+    dispatch(setPage(pageFromQuery));
+    dispatch(setPageSize(pageSizeFromQuery));
+    dispatch(setPokemons(pokemonRenderArray));
+  }, [searchFromQuery, pageFromQuery, pageSizeFromQuery]);
 
   useEffect(() => {
     if (pageFromQuery > MAX_PAGE) {

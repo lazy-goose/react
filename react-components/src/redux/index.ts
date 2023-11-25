@@ -1,9 +1,11 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import type { PreloadedState } from '@reduxjs/toolkit';
 import { pokemonsApi } from './pokemonsApi';
+import pokemonSlice from './pokemonSlice';
 
 const rootReducer = combineReducers({
   [pokemonsApi.reducerPath]: pokemonsApi.reducer,
+  pokemon: pokemonSlice,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
