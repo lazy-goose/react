@@ -16,8 +16,13 @@ exports[`Tests for the Card component > Ensure that the card component renders t
       <img
         alt="pikachu"
         class="_Image_bf7019"
+        data-nimg="1"
+        decoding="async"
         height="192"
-        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png"
+        loading="lazy"
+        src="/_next/image?url=https%3A%2F%2Fraw.githubusercontent.com%2FPokeAPI%2Fsprites%2Fmaster%2Fsprites%2Fpokemon%2F25.png&w=384&q=75"
+        srcset="/_next/image?url=https%3A%2F%2Fraw.githubusercontent.com%2FPokeAPI%2Fsprites%2Fmaster%2Fsprites%2Fpokemon%2F25.png&w=256&q=75 1x, /_next/image?url=https%3A%2F%2Fraw.githubusercontent.com%2FPokeAPI%2Fsprites%2Fmaster%2Fsprites%2Fpokemon%2F25.png&w=384&q=75 2x"
+        style="color: transparent;"
         width="192"
       />
     </div>
