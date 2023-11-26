@@ -14,6 +14,9 @@ import { fetchPokemonByName, fetchPokemonList, searchPokemons } from '../API';
 import pokemons from './data/pokemons.json';
 import names from './data/names.json';
 import pikachu from './data/pikachu.json';
+import { getServerSideProps as getRootPageSSP } from '@/pages/index';
+import { getServerSideProps as getPokemonPageSSP } from '@/pages/index';
+import { GSSPContext } from '@/share/types/GSSPUtils';
 
 let calls: Mock[] = [];
 
@@ -81,5 +84,19 @@ describe('Test API layer', () => {
     calls.forEach((call) => {
       expect(call).toBeCalledWith(Calls.Pokemon);
     });
+  });
+
+  test(`getServerSideProps() for router '/' matches snapshot props`, async () => {
+    const routeData = await getRootPageSSP({
+      query: { name: '' },
+    } as unknown as GSSPContext);
+    expect(routeData).toMatchSnapshot();
+  });
+
+  test(`getServerSideProps() for route '/pokemon/pikachu' matches snapshot props`, async () => {
+    const routeData = await getPokemonPageSSP({
+      query: { name: 'pikachu' },
+    } as unknown as GSSPContext);
+    expect(routeData).toMatchSnapshot();
   });
 });
