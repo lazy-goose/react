@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import MainLayout from '@/components/MainLayout/MainLayout';
 import PokeSearch from '@/components/MainLayout/PokeSearch/PokeSearch';
 import {
@@ -69,12 +68,5 @@ export const getServerSideProps = (async (context) => {
 export default function RootComponent({
   searchProps,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  return (
-    <>
-      <Head>
-        <title>Pokemon Search Api</title>
-      </Head>
-      <MainLayout main={<PokeSearch {...searchProps} />} />
-    </>
-  );
+  return <MainLayout main={<PokeSearch {...searchProps} />} />;
 }
