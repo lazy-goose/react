@@ -1,15 +1,10 @@
-'use client';
-
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import s from './PokeSearch.module.scss';
 import TextInput from '@/components/@UIKit/TextInput/TextInput';
 import Button from '@/components/@UIKit/Button/Button';
 import LinkButton from '@/components/@UIKit/LinkButton/LinkButton';
-import Loader from '@/components/@UIKit/Loader/Loader';
 import PokeList from '@/components/PokeList/PokeList';
-import jcn from '@/utils/joinClassNames';
 import Pagination from '@/components/Pagination/Pagination';
-import { useGetPokemons } from '@/redux';
 import { useDispatch } from 'react-redux';
 import {
   setPage,
@@ -18,29 +13,35 @@ import {
   setSearch,
 } from '@/redux/pokemonSlice';
 import useQueryParams from '@/hooks/useQueryParams';
+import { IPokemon } from 'pokeapi-typescript';
+import { useRouter } from 'next/router';
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, Query } from '@/pages';
 
 const STORAGE_SEARCH = 'pokeSearchString';
 
-const DEFAULT_PAGE = 1;
-const DEFAULT_PAGE_SIZE = 150;
-
-enum Query {
-  Search = 'search',
-  Page = 'page',
-  PageSize = 'pageSize',
-}
-
 export default function PokeSearch({
-  pokemonName = '',
+  searchTerm,
+  pageSize,
+  total,
+  page,
+  pokemonList,
+  pokemonName,
 }: {
-  pokemonName?: string;
+  searchTerm: string;
+  pageSize: number;
+  total: number;
+  page: number;
+  pokemonList: IPokemon[];
+  pokemonName: string;
 }) {
-  const { queryParams, setQueryParams } = useQueryParams();
+  const router = useRouter();
+  const { setQueryParams } = useQueryParams();
+  const [isError, setIsError] = useState(false);
 
   const query = {
-    [Query.Search]: queryParams.get(Query.Search),
-    [Query.Page]: queryParams.get(Query.Page),
-    [Query.PageSize]: queryParams.get(Query.PageSize),
+    [Query.Search]: searchTerm,
+    [Query.Page]: page,
+    [Query.PageSize]: pageSize,
   };
 
   useEffect(() => {
@@ -55,36 +56,13 @@ export default function PokeSearch({
   const pageFromQuery = Number(query.page || DEFAULT_PAGE);
   const pageSizeFromQuery = Number(query.pageSize || DEFAULT_PAGE_SIZE);
 
-  const useGetPokemonsParam = {
-    search: searchFromQuery,
-    page: pageFromQuery,
-    limit: pageSizeFromQuery,
-  } satisfies Parameters<typeof useGetPokemons>[0];
-
-  const [triggerGetPokemons, useGetPokemonsResult] =
-    useGetPokemons(useGetPokemonsParam);
-
-  const {
-    data: [pokemonRenderArray = [], total = 0],
-    isFetching: useGetPokemonsIsFetching,
-    isError: useGetPokemonsError,
-  } = useGetPokemonsResult;
-
-  const [isError, setIsError] = useState(useGetPokemonsError);
-
   const MAX_PAGE = Math.ceil(total / pageSizeFromQuery);
 
-  const triggerSearch = (arg: Partial<typeof useGetPokemonsParam> = {}) => {
-    const params = {
-      ...useGetPokemonsParam,
-      ...arg,
-    };
+  const triggerReload = () => {
     if (pageFromQuery > MAX_PAGE) {
       setQueryParams({ [Query.Page]: '1' });
-      triggerGetPokemons({ ...params, page: 1 });
-    } else {
-      triggerGetPokemons(params);
     }
+    router.replace(router.asPath);
   };
 
   const dispatch = useDispatch();
@@ -93,7 +71,7 @@ export default function PokeSearch({
     dispatch(setSearch(searchFromQuery));
     dispatch(setPage(pageFromQuery));
     dispatch(setPageSize(pageSizeFromQuery));
-    dispatch(setPokemons(pokemonRenderArray));
+    dispatch(setPokemons(pokemonList));
   }, [searchFromQuery, pageFromQuery, pageSizeFromQuery]);
 
   useEffect(() => {
@@ -104,7 +82,7 @@ export default function PokeSearch({
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    triggerSearch();
+    triggerReload();
     localStorage.setItem(STORAGE_SEARCH, searchFromQuery);
   };
 
@@ -120,7 +98,7 @@ export default function PokeSearch({
     setQueryParams({
       [Query.Page]: String(page),
     });
-    triggerSearch({ page });
+    triggerReload();
   };
 
   const handlePageSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -146,10 +124,7 @@ export default function PokeSearch({
         Link to Pull Request
       </a>
       <section className={s.TopSlot}>
-        <form
-          className={jcn(s.Form, useGetPokemonsIsFetching ? s._Disable : null)}
-          onSubmit={handleSubmit}
-        >
+        <form className={s.Form} onSubmit={handleSubmit}>
           <fieldset className={s.Search}>
             <TextInput
               placeholder="Search for pokemons"
@@ -189,14 +164,10 @@ export default function PokeSearch({
         </form>
       </section>
       <section className={s.BottomSlot} data-testid="bottom-slot">
-        {useGetPokemonsIsFetching ? (
-          <Loader className={s.Loader} />
-        ) : (
-          <PokeList
-            pokemons={pokemonRenderArray}
-            selected={pokemonRenderArray.find((p) => p.name === pokemonName)}
-          />
-        )}
+        <PokeList
+          pokemons={pokemonList}
+          selected={pokemonList.find((p) => p.name === pokemonName)}
+        />
       </section>
     </div>
   );
