@@ -1,4 +1,5 @@
-import { NavLink, useSearchParams } from 'react-router-dom';
+import Link from 'next/link';
+import Image from 'next/image';
 import s from './PokeCard.module.scss';
 import jcn from '../../utils/joinClassNames';
 
@@ -13,20 +14,21 @@ type PokeCardProps = {
 
 export default function PokeCard(props: PokeCardProps) {
   const { name, types, imageUrl, imageAlt, className, active } = props;
-  const [searchParams] = useSearchParams();
+
   return (
     <div
       className={jcn(s.PokeCard, active ? s.Active : null, className)}
       data-testid="pokemon-card"
     >
-      <NavLink
-        to={{ pathname: `pokemon/${name}`, search: searchParams.toString() }}
+      <Link
+        href={`/pokemon/${name}`}
+        scroll={false}
         className={s.LinkWrapper}
         data-testid="pokemon-card-link"
       >
         <div className={s.ImageContainer}>
           {imageUrl ? (
-            <img
+            <Image
               width={96 * 2}
               height={96 * 2}
               className={s.Image}
@@ -39,7 +41,7 @@ export default function PokeCard(props: PokeCardProps) {
         </div>
         <h3 className={s.Name}>{name}</h3>
         <p className={s.Types}>Types: {types.join(', ')}</p>
-      </NavLink>
+      </Link>
     </div>
   );
 }

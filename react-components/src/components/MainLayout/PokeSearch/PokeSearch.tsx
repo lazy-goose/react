@@ -1,21 +1,23 @@
+'use client';
+
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
 import s from './PokeSearch.module.scss';
-import TextInput from '../../../components/@UIKit/TextInput/TextInput';
-import Button from '../../../components/@UIKit/Button/Button';
-import LinkButton from '../../../components/@UIKit/LinkButton/LinkButton';
-import Loader from '../../../components/@UIKit/Loader/Loader';
-import PokeList from '../../../components/PokeList/PokeList';
-import jcn from '../../../utils/joinClassNames';
-import Pagination from '../../../components/Pagination/Pagination';
-import { useGetPokemons } from '../../../redux';
+import TextInput from '@/components/@UIKit/TextInput/TextInput';
+import Button from '@/components/@UIKit/Button/Button';
+import LinkButton from '@/components/@UIKit/LinkButton/LinkButton';
+import Loader from '@/components/@UIKit/Loader/Loader';
+import PokeList from '@/components/PokeList/PokeList';
+import jcn from '@/utils/joinClassNames';
+import Pagination from '@/components/Pagination/Pagination';
+import { useGetPokemons } from '@/redux';
 import { useDispatch } from 'react-redux';
 import {
   setPage,
   setPageSize,
   setPokemons,
   setSearch,
-} from '../../../redux/pokemonSlice';
+} from '@/redux/pokemonSlice';
+import useQueryParams from '@/hooks/useQueryParams';
 
 const STORAGE_SEARCH = 'pokeSearchString';
 
@@ -28,19 +30,26 @@ enum Query {
   PageSize = 'pageSize',
 }
 
-export default function PokeSearch() {
-  const { pokemon: pokemonName = '' } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams({
-    [Query.Search]: localStorage.getItem(STORAGE_SEARCH) || '',
-    [Query.Page]: String(DEFAULT_PAGE),
-    [Query.PageSize]: String(DEFAULT_PAGE_SIZE),
-  });
+export default function PokeSearch({
+  pokemonName = '',
+}: {
+  pokemonName?: string;
+}) {
+  const { queryParams, setQueryParams } = useQueryParams();
 
   const query = {
-    [Query.Search]: searchParams.get(Query.Search),
-    [Query.Page]: searchParams.get(Query.Page),
-    [Query.PageSize]: searchParams.get(Query.PageSize),
+    [Query.Search]: queryParams.get(Query.Search),
+    [Query.Page]: queryParams.get(Query.Page),
+    [Query.PageSize]: queryParams.get(Query.PageSize),
   };
+
+  useEffect(() => {
+    if (!query[Query.Search]?.length) {
+      setQueryParams({
+        [Query.Search]: localStorage.getItem(STORAGE_SEARCH) || '',
+      });
+    }
+  }, []);
 
   const searchFromQuery = query.search || '';
   const pageFromQuery = Number(query.page || DEFAULT_PAGE);
@@ -71,10 +80,7 @@ export default function PokeSearch() {
       ...arg,
     };
     if (pageFromQuery > MAX_PAGE) {
-      setSearchParams((params) => {
-        params.set(Query.Page, '1');
-        return params;
-      });
+      setQueryParams({ [Query.Page]: '1' });
       triggerGetPokemons({ ...params, page: 1 });
     } else {
       triggerGetPokemons(params);
@@ -92,10 +98,7 @@ export default function PokeSearch() {
 
   useEffect(() => {
     if (pageFromQuery > MAX_PAGE) {
-      setSearchParams((params) => {
-        params.set(Query.Page, '1');
-        return params;
-      });
+      setQueryParams({ [Query.Page]: '1' });
     }
   }, []);
 
@@ -107,17 +110,15 @@ export default function PokeSearch() {
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trimEnd();
-    setSearchParams((params) => {
-      params.set(Query.Search, value);
-      return params;
+    setQueryParams({
+      [Query.Search]: value,
     });
     localStorage.setItem(STORAGE_SEARCH, value);
   };
 
   const handlePageChange = (page: number) => {
-    setSearchParams((params) => {
-      params.set(Query.Page, String(page));
-      return params;
+    setQueryParams({
+      [Query.Page]: String(page),
     });
     triggerSearch({ page });
   };
@@ -125,9 +126,8 @@ export default function PokeSearch() {
   const handlePageSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const value = e.target.value.replace(/\D/, '').replace(/^0/, '');
-    setSearchParams((params) => {
-      params.set(Query.PageSize, value);
-      return params;
+    setQueryParams({
+      [Query.PageSize]: value,
     });
   };
 

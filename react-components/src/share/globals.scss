@@ -10,22 +10,16 @@
   --background: #ffffff;
 }
 
-:global {
-  html,
-  body,
-  #root {
-    height: 100%;
-  }
-
-  body {
-    margin: 0;
-    box-sizing: border-box;
-    background-color: var(--background);
-  }
+html,
+body,
+#root {
+  height: 100%;
 }
 
-.App {
-  height: 100%;
+body {
+  margin: 0;
+  box-sizing: border-box;
+  background-color: var(--background);
   color: var(--text);
   font-family: 'Alegreya Sans', sans-serif;
 }
