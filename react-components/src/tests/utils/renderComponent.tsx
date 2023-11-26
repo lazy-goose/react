@@ -1,27 +1,27 @@
+import { ReactNode } from 'react';
+import mockRouter from 'next-router-mock';
 import { vi } from 'vitest';
 import { render } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { RootState, setupStore } from '../../redux';
-import App from '../../App';
 import names from '../data/names.json';
 import pokemons from '../data/pokemons.json';
 import pokemon from '../data/pikachu.json';
 
-type RenderAppParams = {
+type RenderComponentProps = {
   path?: string;
   preloadedState?: RootState;
+  children: ReactNode;
 };
 
-const renderApp = ({ path = '/', preloadedState }: RenderAppParams = {}) => {
+const renderComponent = ({
+  children,
+  path = '/',
+  preloadedState,
+}: RenderComponentProps) => {
   const store = setupStore(preloadedState);
-  return render(
-    <MemoryRouter initialEntries={[path]}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </MemoryRouter>
-  );
+  mockRouter.push(path);
+  return render(<Provider store={store}>{children}</Provider>);
 };
 
 const mockPokeAPI = () => {
@@ -37,4 +37,4 @@ const mockPokeAPI = () => {
 };
 
 export { mockPokeAPI };
-export default renderApp;
+export default renderComponent;
