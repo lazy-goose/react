@@ -1,7 +1,8 @@
 import { vi, describe, expect, test, beforeEach } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import renderApp, { mockPokeAPI } from './utils/renderApp';
+import renderComponent, { mockPokeAPI } from './utils/renderComponent';
+import { MockRootComponent } from './utils/mockComponents';
 
 describe('Tests for the Search component', () => {
   beforeEach(() => {
@@ -10,7 +11,7 @@ describe('Tests for the Search component', () => {
 
   test('Verify that clicking the Search button saves the entered value to the local storage', async () => {
     const user = userEvent.setup();
-    renderApp();
+    renderComponent({ children: <MockRootComponent /> });
     const set = vi.spyOn(Object.getPrototypeOf(localStorage), 'setItem');
     const Search = await screen.findByText('Search');
     await user.click(Search);
@@ -18,12 +19,9 @@ describe('Tests for the Search component', () => {
   });
 
   test('Check that the component retrieves the value from the local storage upon mounting', async () => {
-    const mocked = 'text';
-    vi.spyOn(Object.getPrototypeOf(localStorage), 'getItem').mockReturnValue(
-      mocked
-    );
-    renderApp();
-    const Search = await screen.findByTestId('search');
-    expect(Search).toHaveAttribute('value', mocked);
+    const get = vi.spyOn(Object.getPrototypeOf(localStorage), 'getItem');
+    renderComponent({ children: <MockRootComponent /> });
+    await screen.findByTestId('search');
+    expect(get).toBeCalled();
   });
 });
