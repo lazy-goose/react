@@ -1,10 +1,10 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import type { PreloadedState } from '@reduxjs/toolkit';
-import { pokemonsApi } from './pokemonsApi';
+import { pokemonApi } from './pokemonApi';
 import pokemonSlice from './pokemonSlice';
 
 const rootReducer = combineReducers({
-  [pokemonsApi.reducerPath]: pokemonsApi.reducer,
+  [pokemonApi.reducerPath]: pokemonApi.reducer,
   pokemon: pokemonSlice,
 });
 
@@ -14,7 +14,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: false,
-      }).concat(pokemonsApi.middleware),
+      }).concat(pokemonApi.middleware),
     preloadedState,
   });
 
@@ -22,4 +22,4 @@ export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = AppStore['dispatch'];
 
-export * from './pokemonsApi';
+export * from './pokemonApi';

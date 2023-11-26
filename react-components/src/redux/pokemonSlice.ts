@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { IPokemon } from 'pokeapi-typescript';
-import { pokemonsApi } from './pokemonsApi';
+import { pokemonApi } from './pokemonApi';
 
 interface State {
   pokemons: IPokemon[];
@@ -41,7 +41,7 @@ const searchPokemonsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    const api = pokemonsApi;
+    const api = pokemonApi;
     builder
       .addMatcher(api.endpoints.getPokemonByName.matchPending, (state) => {
         state.isFetchingDescription = true;

@@ -9,9 +9,8 @@ import { useEffect } from 'react';
 
 type CustomError = unknown;
 
-export const pokemonsApi = createApi({
-  tagTypes: ['PokemonsPage'],
-  reducerPath: 'pokemonsApi',
+export const pokemonApi = createApi({
+  reducerPath: 'pokemonApi',
   baseQuery: fakeBaseQuery<CustomError>(),
   endpoints: (builder) => ({
     getPokemonByName: builder.query<
@@ -66,7 +65,7 @@ const useGetPokemons = (params: {
   page?: number;
   limit?: number;
 }) => {
-  const { useGetPokemonsListQuery, useLazyGetPokemonsQuery } = pokemonsApi;
+  const { useGetPokemonsListQuery, useLazyGetPokemonsQuery } = pokemonApi;
   const { data: list = [], isSuccess } = useGetPokemonsListQuery();
   const [triggerGetPokemons, { data = [], ...pass }] =
     useLazyGetPokemonsQuery();
@@ -79,5 +78,5 @@ const useGetPokemons = (params: {
   return [lazyGetPokemons, { data, ...pass }] as const;
 };
 
-export const { useGetPokemonByNameQuery } = pokemonsApi;
+export const { useGetPokemonByNameQuery } = pokemonApi;
 export { useGetPokemons };
