@@ -10,9 +10,12 @@ $container-inline-pad: 1rem;
   padding-top: $container-top-pad;
   padding-inline: $container-inline-pad;
   margin-inline: auto;
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
   gap: 2rem;
+
+  > *:first-child {
+    flex: 1;
+  }
 
   @media screen and (max-width: 60rem) {
     display: block;
