@@ -1,14 +1,10 @@
-import { vi, describe, test, expect, beforeEach } from 'vitest';
+import { vi, describe, test, expect } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
-import renderComponent, { mockPokeAPI } from './utils/renderComponent';
+import renderComponent from './utils/renderComponent';
 import userEvent from '@testing-library/user-event';
 import { MockRootComponent } from './utils/mockComponents';
 
 describe('Tests for the Pagination component', () => {
-  beforeEach(() => {
-    mockPokeAPI();
-  });
-
   test('Make sure the component updates URL query parameter when page changes', async () => {
     const user = userEvent.setup();
     renderComponent({

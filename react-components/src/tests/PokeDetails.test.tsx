@@ -1,6 +1,6 @@
-import { describe, test, expect, beforeEach, vi } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 import { screen } from '@testing-library/react';
-import renderComponent, { mockPokeAPI } from './utils/renderComponent';
+import renderComponent from './utils/renderComponent';
 import userEvent from '@testing-library/user-event';
 import pokemon from './data/pikachu.json';
 import { MockPokemonRender } from './utils/mockComponents';
@@ -12,10 +12,6 @@ describe('Tests for the Detailed Card component', () => {
       children: <MockPokemonRender />,
       path: `/pokemon/${pokemon.name}`,
     });
-
-  beforeEach(() => {
-    mockPokeAPI();
-  });
 
   test('Check that a loading indicator is NOT displayed while fetching data', async () => {
     renderPokemonPage();

@@ -1,14 +1,10 @@
-import { vi, describe, expect, test, beforeEach } from 'vitest';
+import { vi, describe, expect, test } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import renderComponent, { mockPokeAPI } from './utils/renderComponent';
+import renderComponent from './utils/renderComponent';
 import { MockRootComponent } from './utils/mockComponents';
 
 describe('Tests for the Search component', () => {
-  beforeEach(() => {
-    mockPokeAPI();
-  });
-
   test('Verify that clicking the Search button saves the entered value to the local storage', async () => {
     const user = userEvent.setup();
     renderComponent({ children: <MockRootComponent /> });
