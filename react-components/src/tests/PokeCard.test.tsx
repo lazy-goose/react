@@ -1,19 +1,11 @@
-import { vi, describe, test, expect, beforeEach, SpyInstance } from 'vitest';
+import { vi, describe, test, expect } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import renderComponent, { mockPokeAPI } from './utils/renderComponent';
-import * as API from '../API';
+import renderComponent from './utils/renderComponent';
 import { MockPokeCard, MockRootComponent } from './utils/mockComponents';
 import mockRouter from 'next-router-mock';
 
 describe('Tests for the Card component', () => {
-  let fetchPokemonByName: SpyInstance;
-
-  beforeEach(() => {
-    mockPokeAPI();
-    fetchPokemonByName = vi.spyOn(API, 'fetchPokemonByName');
-  });
-
   test('Ensure that the card component renders the relevant card data', async () => {
     renderComponent({ children: <MockPokeCard /> });
     const Card = await screen.findByTestId('pokemon-card');
@@ -32,9 +24,12 @@ describe('Tests for the Card component', () => {
 
   test('Check that clicking triggers an additional API call to fetch detailed information', async () => {
     const user = userEvent.setup();
+    const { push } = mockRouter;
+    mockRouter.push = vi.fn();
     renderComponent({ children: <MockRootComponent /> });
     const Cards = await screen.findAllByTestId('pokemon-card-link');
     await user.click(Cards[1]);
-    expect(fetchPokemonByName).not.toBeCalled();
+    expect(mockRouter.push).toBeCalled();
+    mockRouter.push = push;
   });
 });
