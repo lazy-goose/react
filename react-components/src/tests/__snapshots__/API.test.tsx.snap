@@ -1,41 +1,11 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Test API layer > Route '/' getServerSideProps matches snapshot props 1`] = `
-{
-  "props": {
-    "searchProps": {
-      "page": 1,
-      "pageSize": 150,
-      "pokemonList": [],
-      "pokemonName": "",
-      "searchTerm": "",
-      "total": 0,
-    },
-  },
-}
-`;
-
-exports[`Test API layer > Route '/pokemon/pikachu' getServerSideProps matches snapshot props 1`] = `
-{
-  "props": {
-    "searchProps": {
-      "page": 1,
-      "pageSize": 150,
-      "pokemonList": [],
-      "pokemonName": "pikachu",
-      "searchTerm": "",
-      "total": 0,
-    },
-  },
-}
-`;
-
 exports[`Test API layer > getServerSideProps() for route '/pokemon/pikachu' matches snapshot props 1`] = `
 {
   "props": {
     "searchProps": {
       "page": 1,
-      "pageSize": 150,
+      "pageSize": 25,
       "pokemonList": [],
       "pokemonName": "pikachu",
       "searchTerm": "",
@@ -50,7 +20,7 @@ exports[`Test API layer > getServerSideProps() for router '/' matches snapshot p
   "props": {
     "searchProps": {
       "page": 1,
-      "pageSize": 150,
+      "pageSize": 25,
       "pokemonList": [],
       "pokemonName": "",
       "searchTerm": "",

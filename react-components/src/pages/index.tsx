@@ -15,7 +15,7 @@ export enum Query {
 }
 
 export const DEFAULT_PAGE = 1;
-export const DEFAULT_PAGE_SIZE = 150;
+export const DEFAULT_PAGE_SIZE = 25;
 
 const inMemoryCache = {
   pokemonsList: null as null | INamedApiResource<IPokemon>[],
