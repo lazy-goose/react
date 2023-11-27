@@ -8,7 +8,7 @@ export default function useQueryParams<T>() {
   const searchParams = useSearchParams();
   const urlSearchParams = new URLSearchParams(searchParams?.toString());
 
-  function setQueryParams(params: Partial<T>) {
+  function setQueryParams(params: Partial<T>, refresh = true) {
     Object.entries(params).forEach(([key, value]) => {
       if (value === undefined || value === null) {
         urlSearchParams.delete(key);
@@ -19,7 +19,11 @@ export default function useQueryParams<T>() {
 
     const search = urlSearchParams.toString();
     const query = search ? `?${search}` : '';
-    router.replace(`${pathname}${query}`);
+    if (refresh) {
+      router.replace(`${pathname}${query}`);
+    } else {
+      history.replaceState(null, '', `${pathname}${query}`);
+    }
   }
 
   return { queryParams: searchParams, setQueryParams };

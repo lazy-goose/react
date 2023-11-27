@@ -14,7 +14,6 @@ import {
 } from '@/redux/pokemonSlice';
 import useQueryParams from '@/hooks/useQueryParams';
 import { IPokemon } from 'pokeapi-typescript';
-import { useRouter } from 'next/router';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, Query } from '@/pages';
 
 const STORAGE_SEARCH = 'pokeSearchString';
@@ -34,7 +33,6 @@ export default function PokeSearch({
   pokemonList: IPokemon[];
   pokemonName: string;
 }) {
-  const router = useRouter();
   const { setQueryParams } = useQueryParams();
   const [isError, setIsError] = useState(false);
 
@@ -44,26 +42,13 @@ export default function PokeSearch({
     [Query.PageSize]: pageSize,
   };
 
-  useEffect(() => {
-    if (!query[Query.Search]?.length) {
-      setQueryParams({
-        [Query.Search]: localStorage.getItem(STORAGE_SEARCH) || '',
-      });
-    }
-  }, []);
+  const [searchInput, setSearchInput] = useState(() => searchTerm || '');
 
   const searchFromQuery = query.search || '';
-  const pageFromQuery = Number(query.page || DEFAULT_PAGE);
-  const pageSizeFromQuery = Number(query.pageSize || DEFAULT_PAGE_SIZE);
+  const pageFromQuery = Number(query.page) || DEFAULT_PAGE;
+  const pageSizeFromQuery = Number(query.pageSize) || DEFAULT_PAGE_SIZE;
 
   const MAX_PAGE = Math.ceil(total / pageSizeFromQuery);
-
-  const triggerReload = () => {
-    if (pageFromQuery > MAX_PAGE) {
-      setQueryParams({ [Query.Page]: '1' });
-    }
-    router.replace(router.asPath);
-  };
 
   const dispatch = useDispatch();
 
@@ -78,19 +63,28 @@ export default function PokeSearch({
     if (pageFromQuery > MAX_PAGE) {
       setQueryParams({ [Query.Page]: '1' });
     }
+    localStorage.getItem(STORAGE_SEARCH);
   }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    triggerReload();
-    localStorage.setItem(STORAGE_SEARCH, searchFromQuery);
+    const value = searchInput;
+    if (pageFromQuery > MAX_PAGE) {
+      setQueryParams({ [Query.Page]: '1' });
+    }
+    setQueryParams({
+      [Query.Search]: value,
+    });
+    localStorage.setItem(STORAGE_SEARCH, value);
   };
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trimEnd();
-    setQueryParams({
-      [Query.Search]: value,
-    });
+    if (pageFromQuery > MAX_PAGE) {
+      setQueryParams({ [Query.Page]: '1' });
+    }
+    setQueryParams({ [Query.Search]: value }, false);
+    setSearchInput(value);
     localStorage.setItem(STORAGE_SEARCH, value);
   };
 
@@ -98,7 +92,6 @@ export default function PokeSearch({
     setQueryParams({
       [Query.Page]: String(page),
     });
-    triggerReload();
   };
 
   const handlePageSizeChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -128,7 +121,7 @@ export default function PokeSearch({
           <fieldset className={s.Search}>
             <TextInput
               placeholder="Search for pokemons"
-              value={searchFromQuery}
+              value={searchInput}
               onChange={handleSearchChange}
               data-testid="search"
             />

@@ -5,7 +5,7 @@ exports[`Test API layer > getServerSideProps() for route '/pokemon/pikachu' matc
   "props": {
     "searchProps": {
       "page": 1,
-      "pageSize": 25,
+      "pageSize": NaN,
       "pokemonList": [],
       "pokemonName": "pikachu",
       "searchTerm": "",
@@ -20,7 +20,7 @@ exports[`Test API layer > getServerSideProps() for router '/' matches snapshot p
   "props": {
     "searchProps": {
       "page": 1,
-      "pageSize": 25,
+      "pageSize": NaN,
       "pokemonList": [],
       "pokemonName": "",
       "searchTerm": "",

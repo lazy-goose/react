@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import Image from 'next/image';
 import s from './PokeCard.module.scss';
 import jcn from '../../utils/joinClassNames';
+import SmartLink from '../SmartLink';
 
 type PokeCardProps = {
   name: string;
@@ -20,7 +20,7 @@ export default function PokeCard(props: PokeCardProps) {
       className={jcn(s.PokeCard, active ? s.Active : null, className)}
       data-testid="pokemon-card"
     >
-      <Link
+      <SmartLink
         href={`/pokemon/${name}`}
         scroll={false}
         className={s.LinkWrapper}
@@ -41,7 +41,7 @@ export default function PokeCard(props: PokeCardProps) {
         </div>
         <h3 className={s.Name}>{name}</h3>
         <p className={s.Types}>Types: {types.join(', ')}</p>
-      </Link>
+      </SmartLink>
     </div>
   );
 }

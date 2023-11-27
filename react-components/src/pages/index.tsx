@@ -25,8 +25,8 @@ export const getPokeSearchProps = async (context: GSSPContext) => {
   const pokemonName = (context.query.name as string) || '';
 
   const searchTerm = context.query[Query.Search] || '';
-  const page = Number(context.query[Query.Page]) || DEFAULT_PAGE;
-  const pageSize = Number(context.query[Query.PageSize]) || DEFAULT_PAGE_SIZE;
+  const page = Number(context.query[Query.Page] || DEFAULT_PAGE);
+  const pageSize = Number(context.query[Query.PageSize]);
 
   if (!inMemoryCache.pokemonsList) {
     const { data: list = [] } = await store.dispatch(
@@ -40,7 +40,7 @@ export const getPokeSearchProps = async (context: GSSPContext) => {
       search: searchTerm,
       list: inMemoryCache.pokemonsList,
       page,
-      limit: pageSize,
+      limit: pageSize || DEFAULT_PAGE_SIZE,
     })
   );
 
