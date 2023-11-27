@@ -1,0 +1,25 @@
+:root {
+  --main: #800080;
+  --link: #0000ff;
+  --link-active: #ff0000;
+  --text: #000000;
+  --text-on-main: #ffffff;
+  --disabled: #808080;
+  --warning: #ffa500;
+  --neutral: #edeaea;
+  --background: #ffffff;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  box-sizing: border-box;
+  background-color: var(--background);
+  color: var(--text);
+  font-family: 'Alegreya Sans', sans-serif;
+}

@@ -1,0 +1,19 @@
+.Button {
+  padding: 1rem 2rem;
+  font: inherit;
+  color: var(--text-on-main);
+  background-color: var(--main);
+  border: none;
+  cursor: pointer;
+  transition-duration: 200ms;
+  transition-property: opacity background-color;
+
+  &:active {
+    opacity: 0.75;
+  }
+
+  &:disabled {
+    cursor: default;
+    background-color: var(--disabled);
+  }
+}

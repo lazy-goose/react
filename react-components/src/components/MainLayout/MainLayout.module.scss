@@ -1,0 +1,59 @@
+@use 'sass:math';
+
+$container-top-pad: 1rem;
+$container-bot-pad: 2rem;
+$container-inline-pad: 1rem;
+
+.MainLayout {
+  min-height: 100%;
+  max-width: 120rem;
+  padding-top: $container-top-pad;
+  padding-inline: $container-inline-pad;
+  margin-inline: auto;
+  display: flex;
+  gap: 2rem;
+
+  > *:first-child {
+    flex: 1;
+  }
+
+  @media screen and (max-width: 60rem) {
+    display: block;
+  }
+}
+
+.Main {
+  padding-bottom: $container-bot-pad;
+}
+
+.Aside {
+  max-width: calc(100% - #{2 * $container-inline-pad});
+  width: 30rem;
+  outline: 1px solid var(--neutral);
+  background-color: var(--background);
+
+  &Sticky {
+    height: calc(100svh - #{$container-bot-pad});
+    position: sticky;
+    top: $container-top-pad;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
+  &CloseButton {
+    margin-inline: 1rem;
+    align-self: end;
+    font-size: 2rem;
+    cursor: pointer;
+  }
+
+  @media screen and (max-width: 60rem) {
+    position: fixed;
+    top: $container-top-pad;
+    right: $container-inline-pad;
+    overflow-y: auto;
+  }
+}

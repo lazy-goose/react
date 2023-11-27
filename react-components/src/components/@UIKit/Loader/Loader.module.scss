@@ -1,0 +1,23 @@
+.Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Loader {
+  $border: 0.75rem;
+  $size: 5rem;
+  width: $size;
+  height: $size;
+  border: $border solid #f3f3f3;
+  border-top: $border solid var(--main);
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+  animation-delay: calc(var(--delay) * 1ms);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
