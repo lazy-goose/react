@@ -53,12 +53,17 @@ function Main() {
   const uncontrolledFormSubmit = useAppSelector(
     (state) => state.uncontrolledForm.submit
   );
+  const reactHookFormSubmit = useAppSelector(
+    (state) => state.reactHookForm.submit
+  );
 
   return (
     <main className="wrapper">
       <h1>Main</h1>
       <br />
       <Tile data={uncontrolledFormSubmit} />
+      <br />
+      <Tile data={reactHookFormSubmit} />
     </main>
   );
 }
