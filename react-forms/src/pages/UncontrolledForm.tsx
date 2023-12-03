@@ -34,7 +34,7 @@ function UncontrolledForm() {
     const yupErrors = await validateSchema(FormSchema, formData);
     if (Object.keys(yupErrors).length) {
       setPassword(formData.password);
-      dispatch(setAllErrors({ ...errors, ...yupErrors }));
+      dispatch(setAllErrors(yupErrors));
     } else {
       const picture = await imageToBase64(formData[F.picture.field]);
       dispatch(setSubmitData({ ...formData, [F.picture.field]: picture }));
@@ -116,7 +116,7 @@ function UncontrolledForm() {
         >
           <Input
             type="checkbox"
-            defaultValue="false"
+            defaultValue="true"
             name={F.terms.field}
             label={F.terms.label.checkbox}
           />

@@ -47,15 +47,18 @@ const FormSchema = yup.object({
     })
     .test('pictureRequired', F.picture.error.required, (f) => {
       const file = f as File | undefined;
-      return !!file?.name?.length && (file?.size || 0) > 0;
+      if (!file) return false;
+      return Boolean(file.name) && file.size > 0;
     })
     .test('pictureKnownExt', F.picture.error.extension('png', 'jpg'), (f) => {
       const file = f as File | undefined;
-      return ['image/png', 'image/jpeg'].includes(file?.type || '');
+      if (!file) return false;
+      return ['image/png', 'image/jpeg'].includes(file.type || '');
     })
     .test('pictureMaxSize', F.picture.error.size('5MB'), (f) => {
       const file = f as File | undefined;
-      return (file?.size || 0) <= 5.243e6;
+      if (!file) return false;
+      return file.size < 5.243e6;
     }),
   [F.country.field]: yup
     .string()
