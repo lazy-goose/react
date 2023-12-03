@@ -13,7 +13,7 @@ import {
 } from '../redux/slices/uncontrolledForm';
 import { FormElements as F } from '../constants/formElements';
 import imageToBase64 from '../utils/imageToBase64';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { RoutePath } from '../App';
 import usePasswordStrength from '../hooks/usePasswordStrength';
 
@@ -47,6 +47,16 @@ function UncontrolledForm() {
   return (
     <main className="wrapper">
       <h1>Uncontrolled Form</h1>
+      <nav>
+        <ul>
+          <li>
+            <Link to={RoutePath.Main}>Main</Link>
+          </li>
+          <li>
+            <Link to={RoutePath.ReactHookForm}>React hook form</Link>
+          </li>
+        </ul>
+      </nav>
       <br />
       <form
         style={{ border: '1px solid lightGray', padding: '10px' }}

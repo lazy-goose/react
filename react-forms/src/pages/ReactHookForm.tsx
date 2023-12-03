@@ -9,7 +9,7 @@ import { useAppDispatch } from '../hooks/useReduxHelpers';
 import { setSubmitData } from '../redux/slices/uncontrolledForm';
 import { FormElements as F } from '../constants/formElements';
 import imageToBase64 from '../utils/imageToBase64';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { RoutePath } from '../App';
 import usePasswordStrength from '../hooks/usePasswordStrength';
 import { useEffect } from 'react';
@@ -54,6 +54,16 @@ function ReactHookForm() {
   return (
     <main className="wrapper">
       <h1>React Hook Form</h1>
+      <nav>
+        <ul>
+          <li>
+            <Link to={RoutePath.Main}>Main</Link>
+          </li>
+          <li>
+            <Link to={RoutePath.UncontrolledForm}>Uncontrolled form</Link>
+          </li>
+        </ul>
+      </nav>
       <br />
       <form
         style={{ border: '1px solid lightGray', padding: '10px' }}

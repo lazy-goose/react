@@ -1,5 +1,7 @@
+import { Link } from 'react-router-dom';
 import { FormElements } from '../constants/formElements';
 import { useAppSelector } from '../hooks/useReduxHelpers';
+import { RoutePath } from '../App';
 
 const Tile = (props: {
   mark?: boolean;
@@ -88,6 +90,16 @@ function Main() {
   return (
     <main className="wrapper">
       <h1>Main</h1>
+      <nav>
+        <ul>
+          <li>
+            <Link to={RoutePath.ReactHookForm}>React hook form</Link>
+          </li>
+          <li>
+            <Link to={RoutePath.UncontrolledForm}>Uncontrolled form</Link>
+          </li>
+        </ul>
+      </nav>
       <br />
       {uncontrolledFormLastSubmitAt ? (
         <Tile mark={isUncontrolledMark} data={uncontrolledFormSubmit} />
