@@ -6,8 +6,15 @@ import countries from '../constants/countries';
 import FormSchema from '../validators/FormSchema';
 import { validateSchema } from '../utils/yupUtils';
 import { useAppDispatch, useAppSelector } from '../hooks/useReduxHelpers';
-import { setErrors } from '../redux/slices/uncontrolledForm';
+import {
+  UncontrolledFormState,
+  setErrors,
+  setSubmitData,
+} from '../redux/slices/uncontrolledForm';
 import { FormElements as F } from '../constants/formElements';
+import imageToBase64 from '../utils/imageToBase64';
+
+type FormDataFields = UncontrolledFormState['submit'] & { picture: File };
 
 function UncontrolledForm() {
   const errors = useAppSelector((state) => state.uncontrolledForm.errors);
@@ -17,9 +24,15 @@ function UncontrolledForm() {
     e.preventDefault();
     const formData = Object.fromEntries(
       new FormData(e.currentTarget).entries()
-    );
+    ) as FormDataFields;
     const yupErrors = await validateSchema(FormSchema, formData);
-    dispatch(setErrors({ ...errors, ...yupErrors }));
+    if (Object.keys(yupErrors).length) {
+      dispatch(setErrors({ ...errors, ...yupErrors }));
+    } else {
+      const picture = await imageToBase64(formData[F.picture.field]);
+      dispatch(setSubmitData({ ...formData, [F.picture.field]: picture }));
+      dispatch(setErrors({}));
+    }
   };
 
   return (
