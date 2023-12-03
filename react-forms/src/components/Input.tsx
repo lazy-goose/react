@@ -1,4 +1,9 @@
-import { type DetailedHTMLProps, type InputHTMLAttributes, useId } from 'react';
+import {
+  type DetailedHTMLProps,
+  type InputHTMLAttributes,
+  useId,
+  forwardRef,
+} from 'react';
 
 type InputProps = DetailedHTMLProps<
   InputHTMLAttributes<HTMLInputElement>,
@@ -8,15 +13,17 @@ type InputProps = DetailedHTMLProps<
   id?: string;
 };
 
-function Input(props: InputProps) {
-  const inputUniqueId = useId();
-  const { label = '', id = inputUniqueId, ...inputPass } = props;
-  return (
-    <p className="textInput">
-      <label htmlFor={id}>{label}</label>
-      <input id={id} {...inputPass} />
-    </p>
-  );
-}
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  function Input(props, ref) {
+    const inputUniqueId = useId();
+    const { label = '', id = inputUniqueId, ...inputPass } = props;
+    return (
+      <p className="textInput">
+        <label htmlFor={id}>{label}</label>
+        <input id={id} ref={ref} {...inputPass} />
+      </p>
+    );
+  }
+);
 
 export default Input;
