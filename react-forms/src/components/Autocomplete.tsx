@@ -19,6 +19,16 @@ type AutocompleteProps = {
   >;
 };
 
+const initialSuggestions = <T,>(options: T[], steps = 4) => {
+  const start = 0;
+  const stop = 1;
+  const step = stop / steps;
+  return Array.from(
+    { length: (stop - start) / step + 1 },
+    (_, index) => start + index * step
+  ).map((i) => options[Math.floor(i * (options.length - 1))]);
+};
+
 const Autocomplete = (props: AutocompleteProps) => {
   const {
     options,
@@ -30,6 +40,7 @@ const Autocomplete = (props: AutocompleteProps) => {
   const {
     onChange: onInputChange = () => {},
     onBlur: onInputBlur = () => {},
+    onFocus: onInputFocus = () => {},
     onKeyDown: onInputKeyDown = () => {},
     ...passInputProps
   } = inputProps || {};
@@ -64,6 +75,12 @@ const Autocomplete = (props: AutocompleteProps) => {
     setSuggestions([]);
     setSuggestionsActive(false);
     onInputBlur(e);
+  };
+
+  const handleFocus: FocusEventHandler<HTMLInputElement> = (e) => {
+    setSuggestions(initialSuggestions(options));
+    setSuggestionsActive(true);
+    onInputFocus(e);
   };
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -116,6 +133,7 @@ const Autocomplete = (props: AutocompleteProps) => {
         value={value}
         onChange={handleChange}
         onBlur={handleBlur}
+        onFocus={handleFocus}
         onKeyDown={handleKeyDown}
         {...passInputProps}
       />

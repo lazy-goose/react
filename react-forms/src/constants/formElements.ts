@@ -93,6 +93,7 @@ const FormElements = {
   [FormField.Country]: {
     field: FormField.Country,
     label: 'Select country',
+    placeholder: 'Start typing your country',
     error: {
       required: 'Please select your country',
     },
