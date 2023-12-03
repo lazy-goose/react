@@ -16,7 +16,7 @@ function FormErrorGroup(props: Props) {
     <fieldset className={joinedClassName} {...passFieldsetProps}>
       <legend>{legend}</legend>
       {children}
-      <span>{error}</span>
+      <p style={{ minHeight: '1em', lineHeight: 1, color: 'red' }}>{error}</p>
     </fieldset>
   );
 }

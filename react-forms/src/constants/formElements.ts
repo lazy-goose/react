@@ -85,7 +85,9 @@ const FormElements = {
     label: 'Picture',
     error: {
       required: 'Please upload an image',
-      extension: `Unsupported image format: not a '.png' or '.jpeg' file`,
+      extension: (...e: string[]) =>
+        `Unsupported image format: not a ${e.join(', ')} file`,
+      size: (s: string) => `File is too big, can't exceed ${s}`,
     },
   },
   country: {
