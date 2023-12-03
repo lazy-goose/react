@@ -9,10 +9,12 @@ type ExtractedErrorsObject = {
 };
 
 function yupErrorToObject(errors: ValidationError) {
-  return errors.inner.reduce(
-    (object, err) =>
-      err.path ? { ...object, [err.path]: err.errors } : object,
-    {} as ErrorsObject
+  return (
+    errors?.inner?.reduce(
+      (object, err) =>
+        err.path ? { ...object, [err.path]: err.errors } : object,
+      {} as ErrorsObject
+    ) || {}
   );
 }
 
@@ -24,13 +26,15 @@ function extractFirstError(errors: ErrorsObject) {
 
 async function validateSchema(
   schema: AnySchema,
-  data: Record<string, unknown>
+  data: Record<string, unknown> = {}
 ) {
-  const filterNoLength = Object.fromEntries(
-    Object.entries(data).filter(([, v]) => v !== '')
+  const transformed = Object.fromEntries(
+    Object.entries(data)
+      .map(([k, v]) => [k, typeof v === 'string' ? v.trimEnd() : v])
+      .filter(([, v]) => v !== '')
   );
   const yupErrors = await schema
-    .validate(filterNoLength, { abortEarly: false })
+    .validate(transformed, { abortEarly: false })
     .catch((e) => e);
   return extractFirstError(yupErrorToObject(yupErrors));
 }

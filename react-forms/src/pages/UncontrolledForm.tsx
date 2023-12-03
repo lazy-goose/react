@@ -110,7 +110,10 @@ function UncontrolledForm() {
           legend={F.country.label}
           error={errors[F.country.field]}
         >
-          <Autocomplete options={countries.map((c) => c.name)} />
+          <Autocomplete
+            options={countries.map((c) => c.name)}
+            inputProps={{ name: F.country.field }}
+          />
         </FormErrorGroup>
       </form>
     </main>
