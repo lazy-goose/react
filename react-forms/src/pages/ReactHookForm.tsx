@@ -57,10 +57,7 @@ function ReactHookForm() {
       <br />
       <form
         style={{ border: '1px solid lightGray', padding: '10px' }}
-        onSubmit={(e) => {
-          wrapHandleSubmit(handleSubmit)(e);
-          console.log(new FormData(e.currentTarget));
-        }}
+        onSubmit={wrapHandleSubmit(handleSubmit)}
         noValidate
       >
         <Input type="submit" />
