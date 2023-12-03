@@ -2,7 +2,6 @@ import { FormEventHandler } from 'react';
 import FormErrorGroup from '../components/FormErrorGroup';
 import Input from '../components/Input';
 import Autocomplete from '../components/Autocomplete';
-import countries from '../constants/countries';
 import FormSchema from '../validators/FormSchema';
 import { validateSchema } from '../utils/yupUtils';
 import { useAppDispatch, useAppSelector } from '../hooks/useReduxHelpers';
@@ -20,6 +19,7 @@ import usePasswordStrength from '../hooks/usePasswordStrength';
 type FormDataFields = UncontrolledFormState['submit'] & { picture: File };
 
 function UncontrolledForm() {
+  const countries = useAppSelector((state) => state.allCountries);
   const errors = useAppSelector((state) => state.uncontrolledForm.errors);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

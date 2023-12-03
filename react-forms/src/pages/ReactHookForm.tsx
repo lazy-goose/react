@@ -3,9 +3,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import FormErrorGroup from '../components/FormErrorGroup';
 import Input from '../components/Input';
 import Autocomplete from '../components/Autocomplete';
-import countries from '../constants/countries';
 import FormSchema, { FormSchemaType } from '../validators/FormSchema';
-import { useAppDispatch } from '../hooks/useReduxHelpers';
+import { useAppDispatch, useAppSelector } from '../hooks/useReduxHelpers';
 import { setSubmitData } from '../redux/slices/uncontrolledForm';
 import { FormElements as F } from '../constants/formElements';
 import imageToBase64 from '../utils/imageToBase64';
@@ -15,8 +14,9 @@ import usePasswordStrength from '../hooks/usePasswordStrength';
 import { useEffect } from 'react';
 
 function ReactHookForm() {
-  const navigate = useNavigate();
+  const countries = useAppSelector((state) => state.allCountries);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
