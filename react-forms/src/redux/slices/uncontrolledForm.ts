@@ -1,70 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import { FormElements as F } from '../../constants/formElements';
-
-type UncontrolledFormState = {
-  submit: {
-    [F.name.field]: string;
-    [F.age.field]: string;
-    [F.email.field]: string;
-    [F.passwordGroup.field.password]: string;
-    [F.passwordGroup.field.passwordConfirm]: string;
-    [F.gender.field]: string;
-    [F.terms.field]: string;
-    [F.picture.field]: string;
-    [F.country.field]: string;
-  };
-  errors: {
-    [F.name.field]: string;
-    [F.age.field]: string;
-    [F.email.field]: string;
-    [F.passwordGroup.field.password]: string;
-    [F.passwordGroup.field.passwordConfirm]: string;
-    [F.gender.field]: string;
-    [F.terms.field]: string;
-    [F.picture.field]: string;
-    [F.country.field]: string;
-  };
-};
-
-const initialState: UncontrolledFormState = {
-  submit: {
-    [F.name.field]: '',
-    [F.age.field]: '',
-    [F.email.field]: '',
-    [F.passwordGroup.field.password]: '',
-    [F.passwordGroup.field.passwordConfirm]: '',
-    [F.gender.field]: '',
-    [F.terms.field]: '',
-    [F.picture.field]: '',
-    [F.country.field]: '',
-  },
-  errors: {
-    [F.name.field]: '',
-    [F.age.field]: '',
-    [F.email.field]: '',
-    [F.passwordGroup.field.password]: '',
-    [F.passwordGroup.field.passwordConfirm]: '',
-    [F.gender.field]: '',
-    [F.terms.field]: '',
-    [F.picture.field]: '',
-    [F.country.field]: '',
-  },
-};
+import { type PayloadAction } from '@reduxjs/toolkit';
+import initialState, { type FormState } from '../share/formState';
 
 const uncontrolledFormSlice = createSlice({
   name: 'uncontrolledForm',
   initialState,
   reducers: {
-    setSubmitData: (
-      state,
-      action: PayloadAction<UncontrolledFormState['submit']>
-    ) => {
+    setSubmitData: (state, action: PayloadAction<FormState['submit']>) => {
       state.submit = action.payload;
     },
-    setErrors: (
+    setAllErrors: (
       state,
-      action: PayloadAction<Partial<UncontrolledFormState['errors']>>
+      action: PayloadAction<Partial<FormState['errors']>>
     ) => {
       state.errors = {
         ...initialState.errors,
@@ -74,6 +21,6 @@ const uncontrolledFormSlice = createSlice({
   },
 });
 
-export { uncontrolledFormSlice, type UncontrolledFormState };
-export const { setErrors, setSubmitData } = uncontrolledFormSlice.actions;
+export { uncontrolledFormSlice, type FormState as UncontrolledFormState };
+export const { setAllErrors, setSubmitData } = uncontrolledFormSlice.actions;
 export default uncontrolledFormSlice.reducer;

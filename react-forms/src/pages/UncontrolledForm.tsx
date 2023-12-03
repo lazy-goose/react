@@ -8,7 +8,7 @@ import { validateSchema } from '../utils/yupUtils';
 import { useAppDispatch, useAppSelector } from '../hooks/useReduxHelpers';
 import {
   UncontrolledFormState,
-  setErrors,
+  setAllErrors,
   setSubmitData,
 } from '../redux/slices/uncontrolledForm';
 import { FormElements as F } from '../constants/formElements';
@@ -30,11 +30,11 @@ function UncontrolledForm() {
     ) as FormDataFields;
     const yupErrors = await validateSchema(FormSchema, formData);
     if (Object.keys(yupErrors).length) {
-      dispatch(setErrors({ ...errors, ...yupErrors }));
+      dispatch(setAllErrors({ ...errors, ...yupErrors }));
     } else {
       const picture = await imageToBase64(formData[F.picture.field]);
       dispatch(setSubmitData({ ...formData, [F.picture.field]: picture }));
-      dispatch(setErrors({}));
+      dispatch(setAllErrors({}));
       navigate(RoutePath.Main);
     }
   };
