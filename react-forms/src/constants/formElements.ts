@@ -84,7 +84,7 @@ const FormElements = {
     field: FormField.Picture,
     label: 'Picture',
     error: {
-      required: 'Please upload an image',
+      required: 'Please upload an image:',
       extension: (...e: string[]) =>
         `Unsupported image format: not a ${e.join(', ')} file`,
       size: (s: string) => `File is too big, can't exceed ${s}`,
@@ -92,7 +92,7 @@ const FormElements = {
   },
   [FormField.Country]: {
     field: FormField.Country,
-    label: 'Select country',
+    label: 'Select country:',
     placeholder: 'Start typing your country',
     error: {
       required: 'Please select your country',
