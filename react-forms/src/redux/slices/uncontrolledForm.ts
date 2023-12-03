@@ -5,11 +5,13 @@ import { type ListFields, initialListFields } from '../share/formState';
 type UncontrolledFormState = {
   errors: ListFields;
   submit: ListFields;
+  lastSubmitAt: number | null;
 };
 
 const initialState: UncontrolledFormState = {
   errors: initialListFields,
   submit: initialListFields,
+  lastSubmitAt: null,
 };
 
 const uncontrolledFormSlice = createSlice({
@@ -18,6 +20,7 @@ const uncontrolledFormSlice = createSlice({
   reducers: {
     setSubmitData: (state, action: PayloadAction<ListFields>) => {
       state.submit = action.payload;
+      state.lastSubmitAt = Date.now();
     },
     setAllErrors: (state, action: PayloadAction<Partial<ListFields>>) => {
       state.errors = {

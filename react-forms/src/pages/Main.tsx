@@ -2,6 +2,7 @@ import { FormElements } from '../constants/formElements';
 import { useAppSelector } from '../hooks/useReduxHelpers';
 
 const Tile = (props: {
+  mark?: boolean;
   data: {
     name: string;
     age: string;
@@ -12,9 +13,12 @@ const Tile = (props: {
     country: string;
   };
 }) => {
-  const { data } = props;
+  const { data, mark = false } = props;
   return (
-    <ul className="card">
+    <ul
+      className="card"
+      style={{ outline: mark ? '5px solid red' : undefined }}
+    >
       <li>
         <span>{FormElements.name.label}</span>
         <span>{data.name}</span>
@@ -53,17 +57,49 @@ function Main() {
   const uncontrolledFormSubmit = useAppSelector(
     (state) => state.uncontrolledForm.submit
   );
+  const uncontrolledFormLastSubmitAt = useAppSelector(
+    (state) => state.uncontrolledForm.lastSubmitAt
+  );
   const reactHookFormSubmit = useAppSelector(
     (state) => state.reactHookForm.submit
   );
+  const reactHookFormLastSubmitAt = useAppSelector(
+    (state) => state.reactHookForm.lastSubmitAt
+  );
+
+  let isUncontrolledMark = false;
+  let isReactFormMark = false;
+
+  if (uncontrolledFormLastSubmitAt && reactHookFormLastSubmitAt) {
+    isUncontrolledMark =
+      uncontrolledFormLastSubmitAt < reactHookFormLastSubmitAt;
+    isReactFormMark = !isUncontrolledMark;
+  } else if (uncontrolledFormLastSubmitAt && !reactHookFormLastSubmitAt) {
+    isUncontrolledMark = true;
+    isReactFormMark = false;
+  } else if (!uncontrolledFormLastSubmitAt && reactHookFormLastSubmitAt) {
+    isUncontrolledMark = false;
+    isReactFormMark = true;
+  } else {
+    isUncontrolledMark = false;
+    isReactFormMark = false;
+  }
 
   return (
     <main className="wrapper">
       <h1>Main</h1>
       <br />
-      <Tile data={uncontrolledFormSubmit} />
+      {uncontrolledFormLastSubmitAt ? (
+        <Tile mark={isUncontrolledMark} data={uncontrolledFormSubmit} />
+      ) : (
+        'No tile entry'
+      )}
       <br />
-      <Tile data={reactHookFormSubmit} />
+      {reactHookFormLastSubmitAt ? (
+        <Tile mark={isReactFormMark} data={reactHookFormSubmit} />
+      ) : (
+        'No tile entry'
+      )}
     </main>
   );
 }

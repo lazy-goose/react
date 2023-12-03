@@ -4,10 +4,12 @@ import { type ListFields, initialListFields } from '../share/formState';
 
 type ReactHookFormState = {
   submit: ListFields;
+  lastSubmitAt: number | null;
 };
 
 const initialState: ReactHookFormState = {
   submit: initialListFields,
+  lastSubmitAt: null,
 };
 
 const reactHookFormSlice = createSlice({
@@ -16,6 +18,7 @@ const reactHookFormSlice = createSlice({
   reducers: {
     setSubmitData: (state, action: PayloadAction<ListFields>) => {
       state.submit = action.payload;
+      state.lastSubmitAt = Date.now();
     },
   },
 });
