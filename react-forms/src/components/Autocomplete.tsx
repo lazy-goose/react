@@ -51,7 +51,7 @@ const Autocomplete = (props: AutocompleteProps) => {
 
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [suggestionIndex, setSuggestionIndex] = useState(0);
-  const [suggestionsActive, setSuggestionsActive] = useState(false);
+  const [, setSuggestionsActive] = useState(false);
 
   const valueToQuery = (s: string) => s.trimEnd().toLocaleLowerCase();
   const exactOption = (s: string) =>
@@ -137,22 +137,24 @@ const Autocomplete = (props: AutocompleteProps) => {
         onKeyDown={handleKeyDown}
         {...passInputProps}
       />
-      {suggestionsActive && (
-        <ul ref={ulElementRef} className="autocompleteSuggestions">
-          {suggestions.map((suggestion, i) => {
-            return (
-              <li
-                tabIndex={i}
-                className={i === suggestionIndex ? 'active' : ''}
-                key={i}
-                onClick={handleClick}
-              >
-                {suggestion}
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <ul
+        style={{ overflowY: 'scroll', height: 200 }}
+        ref={ulElementRef}
+        className="autocompleteSuggestions"
+      >
+        {suggestions.map((suggestion, i) => {
+          return (
+            <li
+              tabIndex={i}
+              className={i === suggestionIndex ? 'active' : ''}
+              key={i}
+              onClick={handleClick}
+            >
+              {suggestion}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };

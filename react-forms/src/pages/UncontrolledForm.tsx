@@ -130,7 +130,6 @@ function UncontrolledForm() {
         </FormErrorGroup>
 
         <FormErrorGroup
-          style={{ minHeight: 200 }}
           legend={F.country.label}
           error={errors[F.country.field]}
         >
