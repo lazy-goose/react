@@ -20,10 +20,13 @@ const FormSchema = yup.object({
   [F.passwordGroup.field.password]: yup
     .string()
     .required(F.passwordGroup.error.required)
-    .matches(/\d/, F.passwordGroup.error.oneNumber)
-    .matches(/\p{Lu}/u, F.passwordGroup.error.oneUppercase)
-    .matches(/\p{Ll}/u, F.passwordGroup.error.oneLowerCase)
-    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, F.passwordGroup.error.oneSpecial),
+    .matches(/\d/, F.passwordGroup.error.strength.oneNumber)
+    .matches(/\p{Lu}/u, F.passwordGroup.error.strength.oneUppercase)
+    .matches(/\p{Ll}/u, F.passwordGroup.error.strength.oneLowerCase)
+    .matches(
+      /[!+@#$%^&*()\-_"=+{}; :,<.>]/,
+      F.passwordGroup.error.strength.oneSpecial
+    ),
   [F.passwordGroup.field.passwordConfirm]: yup
     .string()
     .required(F.passwordGroup.error.match)

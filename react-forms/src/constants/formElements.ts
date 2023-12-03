@@ -48,12 +48,14 @@ const FormElements = {
     error: {
       match: 'Please make sure your password match',
       required: 'Please enter your password',
-      oneNumber: 'Password must have a number',
-      oneUppercase: 'Password must have a uppercase letter',
-      oneLowerCase: 'Password must have a lowercase letter',
-      oneSpecial: 'Password must have a special character',
+      strength: {
+        oneNumber: 'Password must have a number',
+        oneUppercase: 'Password must have a uppercase letter',
+        oneLowerCase: 'Password must have a lowercase letter',
+        oneSpecial: 'Password must have a special character',
+      },
     },
-    strength: ['Very weak', 'Weak', 'Good', 'Strong'],
+    strengthLevels: ['Very weak', 'Weak', 'Good', 'Strong'],
   },
   [FormField.Gender]: {
     field: FormField.Gender,

@@ -11,6 +11,8 @@ import { FormElements as F } from '../constants/formElements';
 import imageToBase64 from '../utils/imageToBase64';
 import { useNavigate } from 'react-router-dom';
 import { RoutePath } from '../App';
+import usePasswordStrength from '../hooks/usePasswordStrength';
+import { useEffect } from 'react';
 
 function ReactHookForm() {
   const navigate = useNavigate();
@@ -27,6 +29,11 @@ function ReactHookForm() {
     mode: 'onChange',
     resolver: yupResolver(FormSchema),
   });
+
+  const { passwordStrength, setPassword } = usePasswordStrength();
+  useEffect(() => {
+    setPassword(fieldErrors.password?.ref?.value);
+  }, [fieldErrors.password?.ref?.value]);
 
   const errors = Object.fromEntries(
     Object.entries(fieldErrors).map(([k, v]) => [k, v?.message])
@@ -77,7 +84,9 @@ function ReactHookForm() {
           <Input
             type="password"
             {...register(F.passwordGroup.field.password)}
+            onChange={(e) => setPassword(e.target.value || '')}
           />
+          Strength: {passwordStrength || '-'}
         </FormErrorGroup>
 
         <FormErrorGroup

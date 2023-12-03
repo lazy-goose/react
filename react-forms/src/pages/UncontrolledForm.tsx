@@ -15,6 +15,7 @@ import { FormElements as F } from '../constants/formElements';
 import imageToBase64 from '../utils/imageToBase64';
 import { useNavigate } from 'react-router-dom';
 import { RoutePath } from '../App';
+import usePasswordStrength from '../hooks/usePasswordStrength';
 
 type FormDataFields = UncontrolledFormState['submit'] & { picture: File };
 
@@ -23,6 +24,8 @@ function UncontrolledForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const { passwordStrength, setPassword } = usePasswordStrength();
+
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const formData = Object.fromEntries(
@@ -30,11 +33,13 @@ function UncontrolledForm() {
     ) as FormDataFields;
     const yupErrors = await validateSchema(FormSchema, formData);
     if (Object.keys(yupErrors).length) {
+      setPassword(formData.password);
       dispatch(setAllErrors({ ...errors, ...yupErrors }));
     } else {
       const picture = await imageToBase64(formData[F.picture.field]);
       dispatch(setSubmitData({ ...formData, [F.picture.field]: picture }));
       dispatch(setAllErrors({}));
+      setPassword('');
       navigate(RoutePath.Main);
     }
   };
@@ -67,6 +72,7 @@ function UncontrolledForm() {
           error={errors[F.passwordGroup.field.password]}
         >
           <Input type="password" name={F.passwordGroup.field.password} />
+          Strength: {passwordStrength || '-'}
         </FormErrorGroup>
 
         <FormErrorGroup
