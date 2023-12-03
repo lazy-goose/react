@@ -24,15 +24,4 @@ const initialListFields = {
   [F.country.field]: '',
 };
 
-type FormState = {
-  submit: ListFields;
-  errors: ListFields;
-};
-
-const initialState: FormState = {
-  submit: initialListFields,
-  errors: initialListFields,
-};
-
-export { type FormState, type ListFields, initialListFields };
-export default initialState;
+export { type ListFields, initialListFields };
