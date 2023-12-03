@@ -13,12 +13,15 @@ import {
 } from '../redux/slices/uncontrolledForm';
 import { FormElements as F } from '../constants/formElements';
 import imageToBase64 from '../utils/imageToBase64';
+import { useNavigate } from 'react-router-dom';
+import { RoutePath } from '../App';
 
 type FormDataFields = UncontrolledFormState['submit'] & { picture: File };
 
 function UncontrolledForm() {
   const errors = useAppSelector((state) => state.uncontrolledForm.errors);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -32,6 +35,7 @@ function UncontrolledForm() {
       const picture = await imageToBase64(formData[F.picture.field]);
       dispatch(setSubmitData({ ...formData, [F.picture.field]: picture }));
       dispatch(setErrors({}));
+      navigate(RoutePath.Main);
     }
   };
 

@@ -3,7 +3,7 @@ import Main from './pages/Main';
 import UncontrolledForm from './pages/UncontrolledForm';
 import ReactHookForm from './pages/ReactHookForm';
 
-export enum RoutePath {
+enum RoutePath {
   Main = '/',
   UncontrolledForm = '/uncontrolled-form',
   ReactHookForm = '/react-hook-form',
@@ -24,4 +24,5 @@ function App() {
   );
 }
 
+export { RoutePath };
 export default App;
