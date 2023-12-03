@@ -17,17 +17,20 @@ const FormSchema = yup.object({
     .required(F.email.error.required)
     .min(1, F.email.error.required)
     .email(F.email.error.email),
-  [F.passwords.field.new]: yup
+  [F.passwordGroup.field.password]: yup
     .string()
-    .required(F.passwords.error.required)
-    .matches(/\d/, F.passwords.error.oneNumber)
-    .matches(/\p{Lu}/u, F.passwords.error.oneUppercase)
-    .matches(/\p{Ll}/u, F.passwords.error.oneLowerCase)
-    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, F.passwords.error.oneSpecial),
-  [F.passwords.field.retype]: yup
+    .required(F.passwordGroup.error.required)
+    .matches(/\d/, F.passwordGroup.error.oneNumber)
+    .matches(/\p{Lu}/u, F.passwordGroup.error.oneUppercase)
+    .matches(/\p{Ll}/u, F.passwordGroup.error.oneLowerCase)
+    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, F.passwordGroup.error.oneSpecial),
+  [F.passwordGroup.field.passwordConfirm]: yup
     .string()
-    .required(F.passwords.error.match)
-    .oneOf([yup.ref(F.passwords.field.new)], F.passwords.error.match),
+    .required(F.passwordGroup.error.match)
+    .oneOf(
+      [yup.ref(F.passwordGroup.field.password)],
+      F.passwordGroup.error.match
+    ),
   [F.gender.field]: yup.string().required(F.gender.error.required),
   [F.terms.field]: yup
     .string()

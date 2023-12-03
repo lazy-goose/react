@@ -11,7 +11,7 @@ enum FormField {
 }
 
 const FormElements = {
-  name: {
+  [FormField.Name]: {
     field: FormField.Name,
     label: 'Name:',
     error: {
@@ -19,7 +19,7 @@ const FormElements = {
       required: 'Please enter your name',
     },
   },
-  age: {
+  [FormField.Age]: {
     field: FormField.Age,
     label: 'Age:',
     error: {
@@ -27,7 +27,7 @@ const FormElements = {
       required: 'Please enter your age',
     },
   },
-  email: {
+  [FormField.Email]: {
     field: FormField.Email,
     label: 'Email:',
     error: {
@@ -36,14 +36,14 @@ const FormElements = {
       required: 'Please enter your email address',
     },
   },
-  passwords: {
+  passwordGroup: {
     field: {
-      new: FormField.Password,
-      retype: FormField.PasswordConfirm,
+      [FormField.Password]: FormField.Password,
+      [FormField.PasswordConfirm]: FormField.PasswordConfirm,
     },
     label: {
-      new: 'Password:',
-      retype: 'Confirm password:',
+      [FormField.Password]: 'Password:',
+      [FormField.PasswordConfirm]: 'Confirm password:',
     },
     error: {
       match: 'Please make sure your password match',
@@ -55,7 +55,7 @@ const FormElements = {
     },
     strength: ['Very weak', 'Weak', 'Good', 'Strong'],
   },
-  gender: {
+  [FormField.Gender]: {
     field: FormField.Gender,
     label: {
       default: 'Gender:',
@@ -70,7 +70,7 @@ const FormElements = {
       female: 'female',
     },
   },
-  terms: {
+  [FormField.Terms]: {
     field: FormField.Terms,
     label: {
       default: 'Terms and Conditions',
@@ -80,7 +80,7 @@ const FormElements = {
       required: 'Please agree with Terms and Conditions',
     },
   },
-  picture: {
+  [FormField.Picture]: {
     field: FormField.Picture,
     label: 'Picture',
     error: {
@@ -90,7 +90,7 @@ const FormElements = {
       size: (s: string) => `File is too big, can't exceed ${s}`,
     },
   },
-  country: {
+  [FormField.Country]: {
     field: FormField.Country,
     label: 'Select country',
     error: {
@@ -99,4 +99,4 @@ const FormElements = {
   },
 } as const;
 
-export { FormElements };
+export { FormField, FormElements };

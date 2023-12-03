@@ -1,34 +1,25 @@
-import { FormEventHandler, useState } from 'react';
-import { FormElements as F } from '../constants/formElements';
+import { FormEventHandler } from 'react';
 import FormErrorGroup from '../components/FormErrorGroup';
 import Input from '../components/Input';
 import Autocomplete from '../components/Autocomplete';
 import countries from '../constants/countries';
 import FormSchema from '../validators/FormSchema';
 import { validateSchema } from '../utils/yupUtils';
-
-const errorsReset = {
-  [F.name.field]: '',
-  [F.age.field]: '',
-  [F.email.field]: '',
-  [F.passwords.field.new]: '',
-  [F.passwords.field.retype]: '',
-  [F.gender.field]: '',
-  [F.terms.field]: '',
-  [F.picture.field]: '',
-  [F.country.field]: '',
-};
+import { useAppDispatch, useAppSelector } from '../hooks/useReduxHelpers';
+import { setErrors } from '../redux/slices/uncontrolledForm';
+import { FormElements as F } from '../constants/formElements';
 
 function UncontrolledForm() {
-  const [errors, setErrors] = useState(errorsReset);
+  const errors = useAppSelector((state) => state.uncontrolledForm.errors);
+  const dispatch = useAppDispatch();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const formData = Object.fromEntries(
       new FormData(e.currentTarget).entries()
     );
-    const errors = await validateSchema(FormSchema, formData);
-    setErrors({ ...errorsReset, ...errors });
+    const yupErrors = await validateSchema(FormSchema, formData);
+    dispatch(setErrors({ ...errors, ...yupErrors }));
   };
 
   return (
@@ -55,17 +46,17 @@ function UncontrolledForm() {
         </FormErrorGroup>
 
         <FormErrorGroup
-          legend={F.passwords.label.new}
-          error={errors[F.passwords.field.new]}
+          legend={F.passwordGroup.label.password}
+          error={errors[F.passwordGroup.field.password]}
         >
-          <Input type="password" name={F.passwords.field.new} />
+          <Input type="password" name={F.passwordGroup.field.password} />
         </FormErrorGroup>
 
         <FormErrorGroup
-          legend={F.passwords.label.retype}
-          error={errors[F.passwords.field.retype]}
+          legend={F.passwordGroup.label.passwordConfirm}
+          error={errors[F.passwordGroup.field.passwordConfirm]}
         >
-          <Input type="password" name={F.passwords.field.retype} />
+          <Input type="password" name={F.passwordGroup.field.passwordConfirm} />
         </FormErrorGroup>
 
         <FormErrorGroup
