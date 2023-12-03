@@ -1,30 +1,12 @@
-# React + TypeScript + Vite
+## [What inputs should the form contain?](https://github.com/rolling-scopes-school/tasks/blob/master/react/modules/module06/README.md)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Forms Both forms will collect the same data:
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- __name__ (validate for first uppercase letter)
+- __age__ (should be number, no negative values)
+- __email__ (validate for email)
+- __password__ / __match password__ (should match, display the password strength: 1 number, 1 uppercase letter, 1 lowercased letter, 1 special character)
+- __gender__ (you can use radio buttons or select control)
+- __accept T&C__ (checkbox)
+- input control to upload __picture__ (validate size and extension, allow png jpeg, save in redux store as base64)
+- autocomplete control to __select country__ (all countries should be stored in the Redux store)
