@@ -4,6 +4,7 @@
   --border: lightGray;
   --select: lightGray;
   --on-select: black;
+  --focus: lightblue;
 }
 
 body {
@@ -63,16 +64,15 @@ fieldset {
 
 .autocomplete {
   .autocompleteSuggestions {
+    height: 200px;
     padding: 0;
     overflow-y: scroll;
-    height: 200px;
     list-style: none;
-    li {
-      padding: 0 25px;
+    button {
       cursor: pointer;
+      margin: 2px;
       &:hover {
-        color: var(--on-select);
-        background-color: var(--select);
+        outline: var(--focus);
       }
     }
   }

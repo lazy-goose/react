@@ -1,7 +1,6 @@
 import {
   type ChangeEventHandler,
   type MouseEventHandler,
-  type KeyboardEventHandler,
   type DetailedHTMLProps,
   type InputHTMLAttributes,
   type FocusEventHandler,
@@ -19,16 +18,6 @@ type AutocompleteProps = {
   >;
 };
 
-const initialSuggestions = <T,>(options: T[], steps = 6) => {
-  const start = 0;
-  const stop = 1;
-  const step = stop / steps;
-  return Array.from(
-    { length: (stop - start) / step + 1 },
-    (_, index) => start + index * step
-  ).map((i) => options[Math.floor(i * (options.length - 1))]);
-};
-
 const Autocomplete = (props: AutocompleteProps) => {
   const {
     options,
@@ -41,16 +30,14 @@ const Autocomplete = (props: AutocompleteProps) => {
     onChange: onInputChange = () => {},
     onBlur: onInputBlur = () => {},
     onFocus: onInputFocus = () => {},
-    onKeyDown: onInputKeyDown = () => {},
     ...passInputProps
   } = inputProps || {};
 
-  const ulElementRef = useRef<HTMLUListElement>(null);
+  const ulElementRef = useRef<HTMLDivElement>(null);
 
   const [value, _setValue] = useState(initialSearch);
 
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [suggestionIndex, setSuggestionIndex] = useState(0);
   const [, setSuggestionsActive] = useState(false);
 
   const valueToQuery = (s: string) => s.trimEnd().toLocaleLowerCase();
@@ -78,7 +65,7 @@ const Autocomplete = (props: AutocompleteProps) => {
   };
 
   const handleFocus: FocusEventHandler<HTMLInputElement> = (e) => {
-    setSuggestions(initialSuggestions(options));
+    setSuggestions(options);
     setSuggestionsActive(true);
     onInputFocus(e);
   };
@@ -97,30 +84,7 @@ const Autocomplete = (props: AutocompleteProps) => {
     onInputChange(e);
   };
 
-  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
-    switch (e.key) {
-      case 'ArrowUp':
-        if (suggestionIndex !== 0) {
-          setSuggestionIndex(suggestionIndex - 1);
-        }
-        break;
-      case 'ArrowDown':
-        if (suggestionIndex !== suggestions.length - 1) {
-          setSuggestionIndex(suggestionIndex + 1);
-        }
-        break;
-      case 'Enter':
-        changeValue(suggestions[suggestionIndex]);
-        setSuggestionIndex(0);
-        setSuggestionsActive(false);
-        break;
-      default:
-        return;
-    }
-    onInputKeyDown(e);
-  };
-
-  const handleClick: MouseEventHandler<HTMLLIElement> = (e) => {
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     changeValue(e.currentTarget.innerText);
     setSuggestions([]);
     setSuggestionsActive(false);
@@ -135,24 +99,19 @@ const Autocomplete = (props: AutocompleteProps) => {
           onChange={handleChange}
           onBlur={handleBlur}
           onFocus={handleFocus}
-          onKeyDown={handleKeyDown}
+          autoComplete="off"
           {...passInputProps}
         />
       </p>
-      <ul ref={ulElementRef} className="autocompleteSuggestions">
+      <div ref={ulElementRef} className="autocompleteSuggestions">
         {suggestions.map((suggestion, i) => {
           return (
-            <li
-              tabIndex={i}
-              className={i === suggestionIndex ? 'active' : ''}
-              key={i}
-              onClick={handleClick}
-            >
+            <button key={i} onClick={handleClick}>
               {suggestion}
-            </li>
+            </button>
           );
         })}
-      </ul>
+      </div>
     </div>
   );
 };
