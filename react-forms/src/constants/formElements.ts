@@ -75,7 +75,7 @@ const FormElements = {
   [FormField.Terms]: {
     field: FormField.Terms,
     label: {
-      default: 'Terms and Conditions',
+      default: 'Terms and Conditions:',
       checkbox: 'Accept',
     },
     error: {
@@ -84,7 +84,7 @@ const FormElements = {
   },
   [FormField.Picture]: {
     field: FormField.Picture,
-    label: 'Picture',
+    label: 'Picture:',
     error: {
       required: 'Please upload an image:',
       extension: (...e: string[]) =>
