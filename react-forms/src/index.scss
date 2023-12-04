@@ -20,3 +20,29 @@ img {
 pre code {
   white-space: pre-wrap;
 }
+
+.flex {
+  display: flex;
+}
+
+.autocompleteSuggestions {
+  overflow-y: scroll;
+  height: 200px;
+}
+
+.formErrorGroup > p:last-child {
+  min-height: 1em;
+  line-height: 1;
+  color: red;
+}
+
+.card {
+  &.mark {
+    outline: 5px solid red;
+  }
+}
+
+.form {
+  padding: 10px;
+  border: 1px solid lightGray;
+}

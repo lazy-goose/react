@@ -137,11 +137,7 @@ const Autocomplete = (props: AutocompleteProps) => {
         onKeyDown={handleKeyDown}
         {...passInputProps}
       />
-      <ul
-        style={{ overflowY: 'scroll', height: 200 }}
-        ref={ulElementRef}
-        className="autocompleteSuggestions"
-      >
+      <ul ref={ulElementRef} className="autocompleteSuggestions">
         {suggestions.map((suggestion, i) => {
           return (
             <li

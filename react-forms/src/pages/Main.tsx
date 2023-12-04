@@ -17,10 +17,7 @@ const Tile = (props: {
 }) => {
   const { data, mark = false } = props;
   return (
-    <ul
-      className="card"
-      style={{ outline: mark ? '5px solid red' : undefined }}
-    >
+    <ul className={['card', mark ? 'mark' : undefined].join(' ')}>
       <li>
         <span>{FormElements.name.label}</span>
         <span>{data.name}</span>

@@ -58,11 +58,7 @@ function UncontrolledForm() {
         </ul>
       </nav>
       <br />
-      <form
-        style={{ border: '1px solid lightGray', padding: '10px' }}
-        onSubmit={handleSubmit}
-        noValidate
-      >
+      <form className="form" onSubmit={handleSubmit} noValidate>
         <Input type="submit" />
 
         <FormErrorGroup legend={F.name.label} error={errors[F.name.field]}>
@@ -96,7 +92,7 @@ function UncontrolledForm() {
           legend={F.gender.label.default}
           error={errors[F.gender.field]}
         >
-          <div style={{ display: 'flex' }}>
+          <div className="flex">
             <Input
               type="radio"
               name={F.gender.field}

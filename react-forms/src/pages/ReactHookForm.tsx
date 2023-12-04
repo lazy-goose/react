@@ -112,7 +112,7 @@ function ReactHookForm() {
       </nav>
       <br />
       <form
-        style={{ border: '1px solid lightGray', padding: '10px' }}
+        className="form"
         onSubmit={wrapHandleSubmit(handleSubmit)}
         noValidate
       >
@@ -155,7 +155,7 @@ function ReactHookForm() {
           legend={F.gender.label.default}
           error={errors[F.gender.field]}
         >
-          <div style={{ display: 'flex' }}>
+          <div className="flex">
             <Input
               type="radio"
               label={F.gender.label.male}
