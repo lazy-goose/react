@@ -1,5 +1,9 @@
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
+  --error: tomato;
+  --border: lightGray;
+  --select: lightGray;
+  --on-select: black;
 }
 
 body {
@@ -23,26 +27,77 @@ pre code {
 
 .flex {
   display: flex;
+  gap: 5px;
 }
 
-.autocompleteSuggestions {
-  overflow-y: scroll;
-  height: 200px;
+.form {
+  padding: 10px;
+  border: 2px solid var(--border);
+}
+
+.input {
+  padding: 0;
+  label:empty {
+    display: none;
+  }
+}
+
+input {
+  &[type='email'],
+  &[type='password'],
+  &[type='text'],
+  &[type='number'] {
+    width: 100%;
+    padding: 5px 10px;
+    box-sizing: border-box;
+  }
+  &[type='button'],
+  &[type='submit'] {
+    padding: 5px;
+  }
+}
+
+fieldset {
+  border: 2px solid var(--border);
+}
+
+.autocomplete {
+  .autocompleteSuggestions {
+    padding: 0;
+    overflow-y: scroll;
+    height: 200px;
+    list-style: none;
+    li {
+      padding: 0 25px;
+      cursor: pointer;
+      &:hover {
+        color: var(--on-select);
+        background-color: var(--select);
+      }
+    }
+  }
 }
 
 .formErrorGroup > p:last-child {
   min-height: 1em;
   line-height: 1;
-  color: red;
+  color: var(--error);
 }
 
 .card {
-  &.mark {
-    outline: 5px solid red;
-  }
-}
-
-.form {
   padding: 10px;
-  border: 1px solid lightGray;
+  display: grid;
+  gap: 5px;
+  list-style: none;
+  li {
+    display: flex;
+    gap: 5px;
+    text-decoration: dashed;
+  }
+  &.mark {
+    outline: 5px solid var(--error);
+  }
+  li > span:first-child {
+    font-weight: bold;
+  }
 }

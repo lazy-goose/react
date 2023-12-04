@@ -19,7 +19,7 @@ type AutocompleteProps = {
   >;
 };
 
-const initialSuggestions = <T,>(options: T[], steps = 4) => {
+const initialSuggestions = <T,>(options: T[], steps = 6) => {
   const start = 0;
   const stop = 1;
   const step = stop / steps;
@@ -127,16 +127,18 @@ const Autocomplete = (props: AutocompleteProps) => {
   };
 
   return (
-    <div className={'autocomplete'}>
-      <input
-        type="text"
-        value={value}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        onFocus={handleFocus}
-        onKeyDown={handleKeyDown}
-        {...passInputProps}
-      />
+    <div className="autocomplete">
+      <p>
+        <input
+          type="text"
+          value={value}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onFocus={handleFocus}
+          onKeyDown={handleKeyDown}
+          {...passInputProps}
+        />
+      </p>
       <ul ref={ulElementRef} className="autocompleteSuggestions">
         {suggestions.map((suggestion, i) => {
           return (

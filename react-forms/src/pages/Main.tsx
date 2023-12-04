@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import { FormElements } from '../constants/formElements';
 import { useAppSelector } from '../hooks/useReduxHelpers';
 import { RoutePath } from '../App';
+import FormErrorGroup from '../components/FormErrorGroup';
 
 const Tile = (props: {
+  show?: boolean;
   mark?: boolean;
   data: {
     name: string;
@@ -15,7 +17,10 @@ const Tile = (props: {
     country: string;
   };
 }) => {
-  const { data, mark = false } = props;
+  const { data, show = true, mark = false } = props;
+  if (!show) {
+    return;
+  }
   return (
     <ul className={['card', mark ? 'mark' : undefined].join(' ')}>
       <li>
@@ -39,18 +44,20 @@ const Tile = (props: {
         <span>{data.gender}</span>
       </li>
       <li>
+        <span>{FormElements.country.label}</span>
+        <span>{data.country}</span>
+      </li>
+      <li>
         <span>{FormElements.picture.label}</span>
         <span>
           <img src={data.picture} alt="uploaded user picture" />
         </span>
       </li>
-      <li>
-        <span>{FormElements.country.label}</span>
-        <span>{data.country}</span>
-      </li>
     </ul>
   );
 };
+
+const TILE_FALLBACK = 'No tile entry';
 
 function Main() {
   const uncontrolledFormSubmit = useAppSelector(
@@ -86,17 +93,21 @@ function Main() {
         </ul>
       </nav>
       <br />
-      {uncontrolledFormLastSubmitAt ? (
-        <Tile mark={isUncontrolledMark} data={uncontrolledFormSubmit} />
-      ) : (
-        'No tile entry'
-      )}
+      <FormErrorGroup legend="Uncontrolled input">
+        {uncontrolledFormLastSubmitAt ? (
+          <Tile mark={isUncontrolledMark} data={uncontrolledFormSubmit} />
+        ) : (
+          TILE_FALLBACK
+        )}
+      </FormErrorGroup>
       <br />
-      {reactHookFormLastSubmitAt ? (
-        <Tile mark={isReactFormMark} data={reactHookFormSubmit} />
-      ) : (
-        'No tile entry'
-      )}
+      <FormErrorGroup legend="React Hook Forms">
+        {reactHookFormLastSubmitAt ? (
+          <Tile mark={isReactFormMark} data={reactHookFormSubmit} />
+        ) : (
+          TILE_FALLBACK
+        )}
+      </FormErrorGroup>
     </main>
   );
 }

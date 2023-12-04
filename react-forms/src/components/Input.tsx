@@ -18,7 +18,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputUniqueId = useId();
     const { label = '', id = inputUniqueId, ...inputPass } = props;
     return (
-      <p className="textInput">
+      <p className="input flex">
         <label htmlFor={id}>{label}</label>
         <input id={id} ref={ref} {...inputPass} />
       </p>
