@@ -22,7 +22,7 @@ const uncontrolledFormSlice = createSlice({
       state.submit = action.payload;
       state.lastSubmitAt = Date.now();
     },
-    setAllErrors: (state, action: PayloadAction<Partial<ListFields>>) => {
+    setPartialErrors: (state, action: PayloadAction<Partial<ListFields>>) => {
       state.errors = {
         ...initialListFields,
         ...action.payload,
@@ -32,5 +32,6 @@ const uncontrolledFormSlice = createSlice({
 });
 
 export { uncontrolledFormSlice, type UncontrolledFormState };
-export const { setAllErrors, setSubmitData } = uncontrolledFormSlice.actions;
+export const { setPartialErrors, setSubmitData } =
+  uncontrolledFormSlice.actions;
 export default uncontrolledFormSlice.reducer;

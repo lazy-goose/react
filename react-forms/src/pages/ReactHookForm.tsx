@@ -7,33 +7,77 @@ import FormSchema, { FormSchemaType } from '../validators/FormSchema';
 import { useAppDispatch, useAppSelector } from '../hooks/useReduxHelpers';
 import { setSubmitData } from '../redux/slices/uncontrolledForm';
 import { FormElements as F } from '../constants/formElements';
-import imageToBase64 from '../utils/imageToBase64';
+import fileImageToBase64 from '../utils/fileImageToBase64';
 import { Link, useNavigate } from 'react-router-dom';
 import { RoutePath } from '../App';
 import usePasswordStrength from '../hooks/usePasswordStrength';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import base64ToImageFile from '../utils/base64ToImageFile';
+import {
+  setPartialErrors,
+  setPartialFormValues,
+} from '../redux/slices/reactHookForm';
 
 function ReactHookForm() {
   const countries = useAppSelector((state) => state.allCountries);
+  const values = useAppSelector((state) => state.reactHookForm.values);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [picture, setPicture] = useState<File>();
+
+  useEffect(() => {
+    base64ToImageFile(values.picture, 'restored file').then((p) =>
+      setPicture(p)
+    );
+  }, [values.picture]);
+
+  const defaultValues = {
+    ...values,
+    [F.age.field]: values[F.age.field].length
+      ? Number(values[F.age.field])
+      : undefined,
+    [F.picture.field]: picture,
+  };
 
   const {
     register,
     handleSubmit: wrapHandleSubmit,
-    formState: { errors: fieldErrors },
+    formState: { isValid, errors: fieldErrors },
     setValue,
     setError,
     reset,
+    watch,
+    trigger,
   } = useForm<FormSchemaType>({
-    mode: 'onChange',
+    mode: 'all',
+    defaultValues,
     resolver: yupResolver(FormSchema),
   });
 
-  const { passwordStrength, setPassword } = usePasswordStrength();
   useEffect(() => {
-    setPassword(fieldErrors.password?.ref?.value);
-  }, [fieldErrors.password?.ref?.value]);
+    trigger();
+  }, []);
+
+  useEffect(() => {
+    const subscription = watch(async (values) => {
+      const base64Image =
+        values[F.picture.field] instanceof File
+          ? await fileImageToBase64(values[F.picture.field] as File)
+          : '';
+      dispatch(
+        setPartialFormValues({
+          ...values,
+          [F.picture.field]: base64Image || undefined,
+          [F.age.field]: String(values[F.age.field]),
+        })
+      );
+      dispatch(setPartialErrors(errors));
+    });
+    return () => subscription.unsubscribe();
+  }, [dispatch, watch]);
+
+  const { passwordStrength } = usePasswordStrength(values.password);
 
   const errors = Object.fromEntries(
     Object.entries(fieldErrors).map(([k, v]) => [k, v?.message])
@@ -43,8 +87,10 @@ function ReactHookForm() {
     dispatch(
       setSubmitData({
         ...formData,
-        picture: await imageToBase64(formData[F.picture.field] as File),
-        age: String(formData.age),
+        [F.picture.field]: await fileImageToBase64(
+          formData[F.picture.field] as File
+        ),
+        [F.age.field]: String(formData.age),
       })
     );
     reset();
@@ -70,7 +116,7 @@ function ReactHookForm() {
         onSubmit={wrapHandleSubmit(handleSubmit)}
         noValidate
       >
-        <Input type="submit" />
+        <Input type="submit" disabled={!isValid} />
 
         <FormErrorGroup legend={F.name.label} error={errors[F.name.field]}>
           <Input type="text" {...register(F.name.field)} />
@@ -91,7 +137,6 @@ function ReactHookForm() {
           <Input
             type="password"
             {...register(F.passwordGroup.field.password)}
-            onChange={(e) => setPassword(e.target.value || '')}
           />
           Strength: {passwordStrength || '-'}
         </FormErrorGroup>

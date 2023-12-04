@@ -7,11 +7,11 @@ import { validateSchema } from '../utils/yupUtils';
 import { useAppDispatch, useAppSelector } from '../hooks/useReduxHelpers';
 import {
   UncontrolledFormState,
-  setAllErrors,
+  setPartialErrors,
   setSubmitData,
 } from '../redux/slices/uncontrolledForm';
 import { FormElements as F } from '../constants/formElements';
-import imageToBase64 from '../utils/imageToBase64';
+import fileImageToBase64 from '../utils/fileImageToBase64';
 import { Link, useNavigate } from 'react-router-dom';
 import { RoutePath } from '../App';
 import usePasswordStrength from '../hooks/usePasswordStrength';
@@ -34,11 +34,11 @@ function UncontrolledForm() {
     const yupErrors = await validateSchema(FormSchema, formData);
     if (Object.keys(yupErrors).length) {
       setPassword(formData.password);
-      dispatch(setAllErrors(yupErrors));
+      dispatch(setPartialErrors(yupErrors));
     } else {
-      const picture = await imageToBase64(formData[F.picture.field]);
+      const picture = await fileImageToBase64(formData[F.picture.field]);
       dispatch(setSubmitData({ ...formData, [F.picture.field]: picture }));
-      dispatch(setAllErrors({}));
+      dispatch(setPartialErrors({}));
       setPassword('');
       navigate(RoutePath.Main);
     }

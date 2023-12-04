@@ -1,4 +1,4 @@
-async function imageToBase64(file: File) {
+async function fileImageToBase64(file: File) {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.addEventListener('error', () => reject(reader.error));
@@ -7,4 +7,4 @@ async function imageToBase64(file: File) {
   });
 }
 
-export default imageToBase64;
+export default fileImageToBase64;
