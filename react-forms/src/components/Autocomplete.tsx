@@ -106,7 +106,7 @@ const Autocomplete = (props: AutocompleteProps) => {
       <div ref={ulElementRef} className="autocompleteSuggestions">
         {suggestions.map((suggestion, i) => {
           return (
-            <button key={i} onClick={handleClick}>
+            <button key={i} type="button" onClick={handleClick}>
               {suggestion}
             </button>
           );
