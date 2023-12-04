@@ -140,6 +140,7 @@ function ReactHookForm() {
         >
           <Input
             type="password"
+            autoComplete="new-password"
             {...register(F.passwordGroup.field.password)}
           />
           Strength: {passwordStrength || '-'}

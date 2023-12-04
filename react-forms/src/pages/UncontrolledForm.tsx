@@ -77,7 +77,11 @@ function UncontrolledForm() {
           legend={F.passwordGroup.label.password}
           error={errors[F.passwordGroup.field.password]}
         >
-          <Input type="password" name={F.passwordGroup.field.password} />
+          <Input
+            type="password"
+            autoComplete="new-password"
+            name={F.passwordGroup.field.password}
+          />
           Strength: {passwordStrength || '-'}
         </FormErrorGroup>
 
