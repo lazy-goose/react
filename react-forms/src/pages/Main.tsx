@@ -66,23 +66,11 @@ function Main() {
     (state) => state.reactHookForm.lastSubmitAt
   );
 
-  let isUncontrolledMark = false;
-  let isReactFormMark = false;
+  const uTime = uncontrolledFormLastSubmitAt;
+  const rTime = reactHookFormLastSubmitAt;
 
-  if (uncontrolledFormLastSubmitAt && reactHookFormLastSubmitAt) {
-    isUncontrolledMark =
-      uncontrolledFormLastSubmitAt < reactHookFormLastSubmitAt;
-    isReactFormMark = !isUncontrolledMark;
-  } else if (uncontrolledFormLastSubmitAt && !reactHookFormLastSubmitAt) {
-    isUncontrolledMark = true;
-    isReactFormMark = false;
-  } else if (!uncontrolledFormLastSubmitAt && reactHookFormLastSubmitAt) {
-    isUncontrolledMark = false;
-    isReactFormMark = true;
-  } else {
-    isUncontrolledMark = false;
-    isReactFormMark = false;
-  }
+  const isUncontrolledMark = uTime ? (rTime ? uTime > rTime : true) : false;
+  const isReactFormMark = rTime ? (uTime ? rTime > uTime : true) : false;
 
   return (
     <main className="wrapper">
