@@ -5,7 +5,6 @@ import Input from '../components/Input';
 import Autocomplete from '../components/Autocomplete';
 import FormSchema, { FormSchemaType } from '../validators/FormSchema';
 import { useAppDispatch, useAppSelector } from '../hooks/useReduxHelpers';
-import { setSubmitData } from '../redux/slices/uncontrolledForm';
 import { FormElements as F } from '../constants/formElements';
 import fileImageToBase64 from '../utils/fileImageToBase64';
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,6 +13,7 @@ import usePasswordStrength from '../hooks/usePasswordStrength';
 import { useEffect, useState } from 'react';
 import base64ToImageFile from '../utils/base64ToImageFile';
 import {
+  setSubmitData,
   setPartialErrors,
   setPartialFormValues,
 } from '../redux/slices/reactHookForm';
@@ -198,6 +198,7 @@ function ReactHookForm() {
               setError(F.country.field, {
                 message: '',
               });
+              trigger();
             }}
             inputProps={register(F.country.field)}
           />
