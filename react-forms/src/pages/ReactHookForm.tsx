@@ -163,11 +163,13 @@ function ReactHookForm() {
           <div className="flex">
             <Input
               type="radio"
+              value={F.gender.values.male}
               label={F.gender.label.male}
               {...register(F.gender.field)}
             />
             <Input
               type="radio"
+              value={F.gender.values.female}
               label={F.gender.label.female}
               {...register(F.gender.field)}
             />

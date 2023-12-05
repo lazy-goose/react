@@ -99,11 +99,13 @@ function UncontrolledForm() {
           <div className="flex">
             <Input
               type="radio"
+              value={F.gender.values.male}
               name={F.gender.field}
               label={F.gender.label.male}
             />
             <Input
               type="radio"
+              value={F.gender.values.female}
               name={F.gender.field}
               label={F.gender.label.female}
             />
