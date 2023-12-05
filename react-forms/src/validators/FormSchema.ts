@@ -16,7 +16,10 @@ const FormSchema = yup.object({
     .string()
     .required(F.email.error.required)
     .min(1, F.email.error.required)
-    .email(F.email.error.email),
+    .email(F.email.error.email)
+    .test('emailDomainDot', F.email.error.email, (s) =>
+      (s.split('@').at(-1) || '').includes('.')
+    ),
   [F.passwordGroup.field.password]: yup
     .string()
     .required(F.passwordGroup.error.required)
