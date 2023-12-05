@@ -77,11 +77,7 @@ function ReactHookForm() {
     return () => subscription.unsubscribe();
   }, [dispatch, watch]);
 
-  const { passwordStrength, setPassword } = usePasswordStrength();
-
-  useEffect(() => {
-    setPassword(fieldErrors.password?.ref?.value);
-  }, [fieldErrors.password?.ref?.value]);
+  const passwordStrength = usePasswordStrength(values.password);
 
   const errors = Object.fromEntries(
     Object.entries(fieldErrors).map(([k, v]) => [k, v?.message])

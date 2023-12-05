@@ -1,4 +1,4 @@
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useState } from 'react';
 import FormErrorGroup from '../components/FormErrorGroup';
 import Input from '../components/Input';
 import Autocomplete from '../components/Autocomplete';
@@ -24,7 +24,8 @@ function UncontrolledForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { passwordStrength, setPassword } = usePasswordStrength();
+  const [password, setPassword] = useState('')
+  const passwordStrength = usePasswordStrength(password);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
